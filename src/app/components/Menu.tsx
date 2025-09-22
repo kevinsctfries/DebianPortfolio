@@ -43,13 +43,6 @@ export default function Menu({ onClose }: MenuProps) {
       category: "system",
       icon: "🖥️",
     },
-    {
-      id: "files",
-      name: "File Manager",
-      desc: "...",
-      category: "system",
-      icon: "📂",
-    },
   ];
 
   const categories: Category[] = [

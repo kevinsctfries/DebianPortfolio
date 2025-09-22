@@ -5,4 +5,29 @@
     background: url("https://www.debugpoint.com/wp-content/uploads/2022/10/Emerald-wallpaper_1920x1080.png")
         center/cover no-repeat;
     overflow: hidden;
+
+    .desktopIcon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 64px;
+        margin: 8px;
+        cursor: default;
+        user-select: none;
+
+        .icon {
+            font-size: 32px;
+        }
+
+        .label {
+            font-size: 12px;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        &:hover {
+            background: rgba(100, 100, 100, 0.1);
+            border-radius: 4px;
+        }
+    }
 }
