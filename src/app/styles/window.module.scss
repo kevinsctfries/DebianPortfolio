@@ -1,0 +1,53 @@
+.window {
+    border: 1px solid var(--window-border);
+    background: var(--window-bg);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .titlebar {
+            background: var(--muted);
+            color: var(--foreground);
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            cursor: grab;
+
+            .controls {
+                display: flex;
+                gap: 4px;
+            }
+
+            .btn {
+                border: none;
+                background: transparent;
+                color: var(--foreground);
+                font-weight: bold;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+
+                &:hover {
+                    background: var(--accent);
+                    color: white;
+                    border-radius: 2px;
+                }
+            }
+        }
+
+        .content {
+            flex: 1;
+            padding: 8px;
+            overflow: auto;
+        }
+    }
+}
