@@ -33,7 +33,13 @@ export default function DesktopIcon({
         onDragStop?.(snappedX, snappedY);
       }}>
       <div className={styles.desktopIcon} onDoubleClick={onClick}>
-        <Image src={icon} alt={name} width={48} height={48} />
+        <Image
+          src={icon}
+          alt={name}
+          width={48}
+          height={48}
+          className={styles.icon}
+        />
         <div className={styles.label}>{name}</div>
       </div>
     </Rnd>

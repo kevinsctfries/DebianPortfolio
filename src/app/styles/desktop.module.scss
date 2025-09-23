@@ -16,18 +16,14 @@
         user-select: none;
 
         .icon {
-            font-size: 32px;
+            pointer-events: none;
+            display: block;
         }
 
         .label {
             font-size: 12px;
             text-align: center;
             margin-top: 4px;
-        }
-
-        &:hover {
-            background: rgba(100, 100, 100, 0.1);
-            border-radius: 4px;
         }
     }
 }
