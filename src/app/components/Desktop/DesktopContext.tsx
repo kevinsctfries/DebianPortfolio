@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-
-export type AppName = "about" | "terminal" | "minesweeper";
+import { AppName } from "./appData";
 
 type DesktopContextType = {
   openApps: AppName[];

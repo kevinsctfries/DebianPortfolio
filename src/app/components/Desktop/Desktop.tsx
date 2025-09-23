@@ -1,25 +1,14 @@
 "use client";
 
 import styles from "./desktop.module.scss";
-import { AppName, useDesktop } from "./DesktopContext";
+import { useDesktop } from "./DesktopContext";
 import Window from "./Window";
 import About from "../../apps/About/About";
 import Terminal from "../../apps/Terminal/Terminal";
 import Minesweeper from "../../apps/Minesweeper/Minesweeper";
 import DesktopIcon from "./DesktopIcon";
 import { useState } from "react";
-
-export type DesktopApp = {
-  id: "about" | "terminal" | "minesweeper";
-  name: string;
-  icon: string;
-};
-
-export const desktopApps: DesktopApp[] = [
-  { id: "about", name: "About", icon: "/gnome-info.webp" },
-  { id: "terminal", name: "Terminal", icon: "/gnome-eterm.webp" },
-  { id: "minesweeper", name: "Minesweeper", icon: "/minesweeper.webp" },
-];
+import { desktopApps, AppName } from "./appData";
 
 const GRID_SIZE = 80;
 const PANEL_HEIGHT = 40;

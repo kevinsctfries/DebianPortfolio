@@ -2,7 +2,8 @@
 
 import { useContext, useState, useRef, useEffect } from "react";
 import styles from "./menu.module.scss";
-import { useDesktop, AppName } from "../Desktop/DesktopContext";
+import { useDesktop } from "../Desktop/DesktopContext";
+import { AppName, desktopApps } from "../Desktop/appData";
 
 type MenuProps = {
   onClose: () => void;
@@ -28,22 +29,13 @@ export default function Menu({ onClose }: MenuProps) {
   const [selectedCategory, setSelectedCategory] = useState("favorites");
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const apps: AppEntry[] = [
-    {
-      id: "about",
-      name: "About",
-      desc: "...",
-      category: "settings",
-      icon: "ℹ️",
-    },
-    {
-      id: "terminal",
-      name: "Terminal",
-      desc: "...",
-      category: "system",
-      icon: "🖥️",
-    },
-  ];
+  const apps: AppEntry[] = desktopApps.map(app => ({
+    id: app.id,
+    name: app.name,
+    desc: app.desc || "",
+    category: app.category || "",
+    icon: app.icon,
+  }));
 
   const categories: Category[] = [
     { id: "favorites", name: "Favorites", icon: "⭐" },

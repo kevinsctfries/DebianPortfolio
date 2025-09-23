@@ -5,22 +5,15 @@ import styles from "./panel.module.scss";
 import Menu from "./Menu";
 import { useDesktop } from "../Desktop/DesktopContext";
 import Image from "next/image";
+import { desktopApps } from "../Desktop/appData";
 
 export default function Panel() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { openApps, openApp } = useDesktop();
 
   const getAppIcon = (appId: string) => {
-    switch (appId) {
-      case "about":
-        return "/gnome-info.webp";
-      case "terminal":
-        return "/gnome-eterm.webp";
-      case "minesweeper":
-        return "/minesweeper.webp";
-      default:
-        return "/gnome-info.webp";
-    }
+    const app = desktopApps.find(a => a.id === appId);
+    return app?.icon || "/gnome-info.webp";
   };
 
   return (
