@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
-export type AppName = "about" | "terminal" | "files";
+export type AppName = "about" | "terminal" | "minesweeper";
 
 type DesktopContextType = {
   openApps: AppName[];
