@@ -11,6 +11,7 @@ type DesktopIconProps = {
   x?: number;
   y?: number;
   onDragStop?: (x: number, y: number) => void;
+  onDrag?: (x: number, y: number) => void;
 };
 
 export default function DesktopIcon({
@@ -20,12 +21,16 @@ export default function DesktopIcon({
   x = 0,
   y = 0,
   onDragStop,
+  onDrag,
 }: DesktopIconProps) {
   return (
     <Rnd
       position={{ x, y }}
       size={{ width: 64, height: 64 }}
       bounds="parent"
+      onDrag={(e, d) => {
+        onDrag?.(d.x, d.y);
+      }}
       onDragStop={(e, d) => {
         const gridSize = 80;
         const snappedX = Math.round(d.x / gridSize) * gridSize;
