@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import styles from "../styles/minesweeper.module.scss";
+import styles from "./minesweeper.module.scss";
 
 type Cell = {
   isMine: boolean;

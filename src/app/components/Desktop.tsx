@@ -3,9 +3,9 @@
 import styles from "../styles/desktop.module.scss";
 import { AppName, useDesktop } from "./DesktopContext";
 import Window from "./Window";
-import About from "../apps/About";
-import Terminal from "../apps/Terminal";
-import Minesweeper from "../apps/Minesweeper";
+import About from "../apps/About/About";
+import Terminal from "../apps/Terminal/Terminal";
+import Minesweeper from "../apps/Minesweeper/Minesweeper";
 import DesktopIcon from "./DesktopIcon";
 import { useState } from "react";
 

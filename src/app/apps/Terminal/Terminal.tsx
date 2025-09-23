@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
-import styles from "../styles/apps.module.scss";
+import styles from "../../styles/apps.module.scss";
 import "./xterm.css";
 
 export default function Terminal() {
