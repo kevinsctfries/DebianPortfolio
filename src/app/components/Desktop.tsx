@@ -8,9 +8,10 @@ import About from "../apps/About";
 import Terminal from "../apps/Terminal";
 import DesktopIcon from "./DesktopIcon";
 import { useState } from "react";
+import Minesweeper from "../apps/Minesweeper";
 
 export type DesktopApp = {
-  id: "about" | "terminal";
+  id: "about" | "terminal" | "minesweeper";
   name: string;
   icon: string;
 };
@@ -18,6 +19,7 @@ export type DesktopApp = {
 export const desktopApps: DesktopApp[] = [
   { id: "about", name: "About", icon: "ℹ️" },
   { id: "terminal", name: "Terminal", icon: "🖥️" },
+  { id: "minesweeper", name: "Minesweeper", icon: "" },
 ];
 
 export default function Desktop() {
@@ -29,6 +31,8 @@ export default function Desktop() {
         return <About />;
       case "terminal":
         return <Terminal />;
+      case "minesweeper":
+        return <Minesweeper />;
       default:
         return null;
     }
@@ -64,7 +68,13 @@ export default function Desktop() {
       ))}
 
       {openApps.map(appId => (
-        <Window key={appId} title={appId} onClose={() => closeApp(appId)}>
+        <Window
+          key={appId}
+          title={appId}
+          onClose={() => closeApp(appId)}
+          fixedSize={appId === "minesweeper"}
+          width={appId === "minesweeper" ? 400 : undefined}
+          height={appId === "minesweeper" ? 435 : undefined}>
           {getAppComponent(appId)}
         </Window>
       ))}

@@ -1,0 +1,101 @@
+.minesweeper {
+    text-align: center;
+    font-family: monospace;
+    color: #fff;
+    background: #222;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .infoBar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #333;
+        padding: 0.25rem 1rem;
+        border: 1px solid #555;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        width: 100%;
+        max-width: 400px;
+
+        .left {
+            flex: 1;
+            text-align: left;
+        }
+
+        .center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .right {
+            flex: 1;
+            text-align: right;
+        }
+    }
+
+    .gameOver {
+        color: red;
+        font-weight: bold;
+    }
+
+    .gameWon {
+        color: lime;
+        font-weight: bold;
+    }
+
+    .board {
+        display: inline-block;
+        margin: 0.5rem auto;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .cell {
+        width: 30px;
+        height: 30px;
+        border: 1px solid #555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        background: #444;
+        font-weight: bold;
+        user-select: none;
+
+        &.revealed {
+            background: #888;
+            cursor: default;
+        }
+
+        &.flagged {
+            color: red;
+        }
+    }
+
+    .footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .restartButton {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #444;
+        }
+    }
+}

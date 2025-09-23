@@ -12,6 +12,7 @@ type WindowProps = {
   defaultY?: number;
   width?: number;
   height?: number;
+  fixedSize?: boolean;
 };
 
 export default function Window({
@@ -22,6 +23,7 @@ export default function Window({
   defaultY = 100,
   width = 400,
   height = 300,
+  fixedSize = false,
 }: WindowProps) {
   return (
     <Rnd
@@ -35,6 +37,7 @@ export default function Window({
       minHeight={100}
       bounds="parent"
       dragHandleClassName={styles.titlebar}
+      enableResizing={fixedSize ? false : undefined}
       className={styles.window}>
       <div className={styles.inner}>
         <div className={styles.titlebar}>
