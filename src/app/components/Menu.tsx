@@ -13,7 +13,7 @@ type AppEntry = {
   name: string;
   desc: string;
   category: string;
-  icon: string; // replace with <img> for real icons
+  icon: string;
 };
 
 type Category = {

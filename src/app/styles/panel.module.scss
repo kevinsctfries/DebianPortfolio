@@ -1,14 +1,11 @@
 .panel {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    z-index: 60;
     height: 2.5rem;
     display: flex;
     align-items: center;
     background: #2b2b2b;
     padding: 0 0.5rem;
-    z-index: 50;
 
     .menu {
         cursor: pointer;

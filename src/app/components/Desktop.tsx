@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "../styles/desktop.module.scss";
-import Panel from "./Panel";
 import { AppName, useDesktop } from "./DesktopContext";
 import Window from "./Window";
 import About from "../apps/About";
@@ -53,8 +52,6 @@ export default function Desktop() {
 
   return (
     <div className={styles.desktop}>
-      <Panel />
-
       {desktopApps.map(app => (
         <DesktopIcon
           key={app.id}
