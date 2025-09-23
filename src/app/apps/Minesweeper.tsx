@@ -159,8 +159,13 @@ export default function Minesweeper() {
               <div
                 key={c}
                 className={`${styles.cell} 
-                  ${cell.revealed ? styles.revealed : ""} 
-                  ${cell.flagged ? styles.flagged : ""}`}
+    ${cell.revealed ? styles.revealed : ""} 
+    ${cell.flagged ? styles.flagged : ""}
+    ${
+      cell.revealed && cell.adjacentMines > 0
+        ? styles[`number-${cell.adjacentMines}`]
+        : ""
+    }`}
                 onClick={() => revealCell(r, c)}
                 onContextMenu={e => toggleFlag(r, c, e)}>
                 {cell.revealed

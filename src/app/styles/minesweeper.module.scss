@@ -70,6 +70,32 @@
         &.revealed {
             background: #888;
             cursor: default;
+            font-size: 1rem;
+
+            &.number-1 {
+                color: blue;
+            }
+            &.number-2 {
+                color: green;
+            }
+            &.number-3 {
+                color: red;
+            }
+            &.number-4 {
+                color: darkblue;
+            }
+            &.number-5 {
+                color: brown;
+            }
+            &.number-6 {
+                color: cyan;
+            }
+            &.number-7 {
+                color: black;
+            }
+            &.number-8 {
+                color: gray;
+            }
         }
 
         &.flagged {
