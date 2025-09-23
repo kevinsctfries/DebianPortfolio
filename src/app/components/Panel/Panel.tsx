@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../styles/panel.module.scss";
+import styles from "./panel.module.scss";
 import Menu from "./Menu";
-import { useDesktop } from "./DesktopContext";
+import { useDesktop } from "../Desktop/DesktopContext";
 import Image from "next/image";
 
 export default function Panel() {

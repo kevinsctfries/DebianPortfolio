@@ -1,8 +1,8 @@
 "use client";
 
 import { useContext, useState, useRef, useEffect } from "react";
-import styles from "../styles/menu.module.scss";
-import { useDesktop, AppName } from "./DesktopContext";
+import styles from "./menu.module.scss";
+import { useDesktop, AppName } from "../Desktop/DesktopContext";
 
 type MenuProps = {
   onClose: () => void;

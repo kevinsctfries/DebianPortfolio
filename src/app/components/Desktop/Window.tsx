@@ -1,7 +1,7 @@
 "use client";
 
 import { Rnd } from "react-rnd";
-import styles from "../styles/window.module.scss";
+import styles from "./window.module.scss";
 import { ReactNode } from "react";
 
 type WindowProps = {

@@ -1,6 +1,6 @@
-import Desktop from "./components/Desktop";
-import { DesktopProvider } from "./components/DesktopContext";
-import Panel from "./components/Panel";
+import Desktop from "./components/Desktop/Desktop";
+import { DesktopProvider } from "./components/Desktop/DesktopContext";
+import Panel from "./components/Panel/Panel";
 import styles from "./page.module.scss";
 
 export default function Home() {

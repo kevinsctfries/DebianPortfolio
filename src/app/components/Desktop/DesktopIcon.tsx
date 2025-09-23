@@ -1,7 +1,7 @@
 "use client";
 
 import { Rnd } from "react-rnd";
-import styles from "../styles/desktop.module.scss";
+import styles from "./desktop.module.scss";
 import Image from "next/image";
 
 type DesktopIconProps = {
