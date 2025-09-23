@@ -2,6 +2,7 @@
 
 import { Rnd } from "react-rnd";
 import styles from "../styles/desktop.module.scss";
+import Image from "next/image";
 
 type DesktopIconProps = {
   name: string;
@@ -32,7 +33,7 @@ export default function DesktopIcon({
         onDragStop?.(snappedX, snappedY);
       }}>
       <div className={styles.desktopIcon} onDoubleClick={onClick}>
-        <div className={styles.icon}>{icon}</div>
+        <Image src={icon} alt={name} width={48} height={48} />
         <div className={styles.label}>{name}</div>
       </div>
     </Rnd>

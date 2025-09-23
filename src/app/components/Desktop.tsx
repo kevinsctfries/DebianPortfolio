@@ -17,9 +17,9 @@ export type DesktopApp = {
 };
 
 export const desktopApps: DesktopApp[] = [
-  { id: "about", name: "About", icon: "ℹ️" },
-  { id: "terminal", name: "Terminal", icon: "🖥️" },
-  { id: "minesweeper", name: "Minesweeper", icon: "" },
+  { id: "about", name: "About", icon: "/gnome-info.webp" },
+  { id: "terminal", name: "Terminal", icon: "/gnome-eterm.webp" },
+  { id: "minesweeper", name: "Minesweeper", icon: "/minesweeper.webp" },
 ];
 
 export default function Desktop() {
