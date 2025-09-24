@@ -1,5 +1,14 @@
+// layout.tsx
 import type { Metadata } from "next";
 import "./globals.scss";
+
+import { Ubuntu } from "next/font/google";
+
+const ubuntu = Ubuntu({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "kevin@portfolio",
@@ -12,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${ubuntu.variable}`}>
       <body>{children}</body>
     </html>
   );

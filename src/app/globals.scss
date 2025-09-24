@@ -13,8 +13,7 @@
   --muted: #555753;
   --window-bg: #d3d7cf;
   --window-border: #888a85;
-  --font-sans: "Ubuntu", "Segoe UI", Roboto, sans-serif;
-  --font-mono: "Fira Code", "Ubuntu Mono", monospace;
+  --font-sans: var(--font-sans);
 }
 
 html,
