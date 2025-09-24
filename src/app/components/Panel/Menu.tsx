@@ -165,7 +165,7 @@ export default function Menu({ onClose }: MenuProps) {
 
         <div className={styles.sidebar}>
           {categories.map(cat => (
-            <>
+            <div key={cat.id}>
               <button
                 key={cat.id}
                 className={`${styles.categoryButton} ${
@@ -183,7 +183,7 @@ export default function Menu({ onClose }: MenuProps) {
               </button>
 
               {cat.id === "all" && <hr className={styles.divider} />}
-            </>
+            </div>
           ))}
         </div>
       </div>
