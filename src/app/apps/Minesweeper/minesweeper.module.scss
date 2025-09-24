@@ -1,6 +1,5 @@
 .minesweeper {
     text-align: center;
-    font-family: monospace;
     color: #fff;
     background: #222;
     padding: 0.5rem;
@@ -69,8 +68,8 @@
 
         &.revealed {
             background: #888;
-            cursor: default;
             font-size: 1rem;
+            cursor: default;
 
             &.number-1 {
                 color: blue;
