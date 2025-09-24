@@ -149,10 +149,15 @@ export default function Menu({ onClose }: MenuProps) {
                 <button
                   className={styles.appButton}
                   onClick={() => handleAppClick(app.id)}>
-                  <span className={styles.appIcon}>{app.icon}</span>
+                  <Image
+                    src={app.icon}
+                    alt={app.name}
+                    width={22}
+                    height={22}
+                    className={styles.appIcon}
+                  />
                   <div className={styles.appText}>
                     <span className={styles.appName}>{app.name}</span>
-                    <span className={styles.appDesc}>{app.desc}</span>
                   </div>
                 </button>
               </li>

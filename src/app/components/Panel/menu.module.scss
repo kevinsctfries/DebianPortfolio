@@ -18,7 +18,6 @@
     .appsList {
         flex: 1;
         overflow-y: auto;
-        padding: 8px;
         margin-left: 7px;
         background: #ebebeb;
         border: 1px solid #828282;
@@ -30,12 +29,13 @@
 
             li {
                 .appButton {
+                    color: #3c3c3c;
                     display: flex;
                     align-items: center;
                     width: 100%;
                     background: transparent;
                     border: none;
-                    padding: 8px;
+                    padding: 2px 3px;
                     border-radius: 4px;
                     cursor: pointer;
                     text-align: left;
@@ -46,10 +46,8 @@
                     }
 
                     .appIcon {
-                        margin-right: 12px;
+                        margin-right: 4px;
                         display: flex;
-                        align-items: center;
-                        justify-content: center;
                     }
 
                     .appText {
@@ -58,12 +56,6 @@
 
                         .appName {
                             font-size: 12px;
-                            font-weight: bold;
-                        }
-
-                        .appDesc {
-                            font-size: 10px;
-                            color: #707070;
                         }
                     }
                 }

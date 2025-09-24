@@ -17,19 +17,19 @@ export const desktopApps: DesktopApp[] = [
   {
     id: "about",
     name: "About",
-    icon: "/gnome-info.webp",
+    icon: "/apps/dialog-information.svg",
     component: <About />,
   },
   {
     id: "terminal",
     name: "Terminal",
-    icon: "/gnome-eterm.webp",
+    icon: "/apps/utilities-terminal.svg",
     component: <Terminal />,
   },
   {
     id: "minesweeper",
     name: "Minesweeper",
-    icon: "/minesweeper.webp",
+    icon: "/apps/minesweeper.webp",
     component: <Minesweeper />,
   },
 ];
