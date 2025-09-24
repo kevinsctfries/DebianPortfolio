@@ -129,6 +129,10 @@
                     color: #ffffff;
                 }
             }
+
+            &:hover .categoryIcon {
+                filter: brightness(1.1);
+            }
         }
 
         .divider {
@@ -166,17 +170,27 @@
         .commands {
             display: flex;
             justify-content: flex-end;
+            align-items: center;
+            gap: 1px;
 
             .commandButton {
+                display: flex;
+                align-items: center;
                 background: transparent;
-                border: none;
+                border: 1px solid transparent;
                 cursor: pointer;
-                font-size: 20px;
-                margin-left: 8px;
+                padding: 2px;
                 color: #707070;
+                transition: background 0.2s;
 
                 &:hover {
-                    color: #3c3c3c;
+                    background: #e5e5e5;
+                    border: 1px solid #828282;
+                    border-radius: 4px;
+                }
+
+                &:hover .categoryIcon {
+                    filter: brightness(1.1);
                 }
             }
         }
