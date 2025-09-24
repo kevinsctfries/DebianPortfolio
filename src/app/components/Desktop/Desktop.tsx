@@ -27,17 +27,7 @@ export default function Desktop() {
     }, {} as Record<string, { x: number; y: number }>)
   );
 
-  const [highlight, setHighlight] = useState<{ x: number; y: number } | null>(
-    null
-  );
-
-  const handleDrag = (x: number, y: number) => {
-    const snappedX = Math.round(x / GRID_SIZE) * GRID_SIZE;
-    const snappedY = Math.round((y - PANEL_HEIGHT) / GRID_SIZE) * GRID_SIZE;
-    setHighlight({ x: snappedX, y: snappedY + PANEL_HEIGHT });
-  };
-
-  const handleDragStop = (id: string, x: number, y: number) => {
+  const handleDrag = (id: string, x: number, y: number) => {
     setIconPositions(prev => {
       const otherId = Object.keys(prev).find(
         key => key !== id && prev[key].x === x && prev[key].y === y
@@ -53,19 +43,10 @@ export default function Desktop() {
 
       return { ...prev, [id]: { x, y } };
     });
-
-    setHighlight(null);
   };
 
   return (
     <div className={styles.desktop}>
-      {highlight && (
-        <div
-          className={styles.gridHighlight}
-          style={{ left: highlight.x, top: highlight.y }}
-        />
-      )}
-
       {desktopApps.map(app => (
         <DesktopIcon
           key={app.id}
@@ -73,8 +54,7 @@ export default function Desktop() {
           icon={app.icon}
           x={iconPositions[app.id].x}
           y={iconPositions[app.id].y}
-          onDrag={handleDrag}
-          onDragStop={(x, y) => handleDragStop(app.id, x, y)}
+          onDragStop={(x, y) => handleDrag(app.id, x, y)}
           onClick={() => openApp(app.id)}
         />
       ))}

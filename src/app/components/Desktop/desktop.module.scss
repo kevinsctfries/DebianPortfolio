@@ -25,15 +25,4 @@
             margin-top: 4px;
         }
     }
-
-    .gridHighlight {
-        position: absolute;
-        width: 80px;
-        height: 80px;
-        background: rgba(82, 148, 226, 0.4);
-        border: 2px solid #5294e2;
-        border-radius: 4px;
-        pointer-events: none;
-        z-index: 5;
-    }
 }
