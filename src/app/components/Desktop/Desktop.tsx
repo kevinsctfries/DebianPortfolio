@@ -8,7 +8,6 @@ import { useState } from "react";
 import { desktopApps } from "./appData";
 
 const GRID_SIZE = 80;
-const PANEL_HEIGHT = 40;
 
 export default function Desktop() {
   const { openApps, openApp, closeApp } = useDesktop();
