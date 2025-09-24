@@ -93,18 +93,17 @@
 
     .sidebar {
         width: 140px;
-        background: #cecece;
         display: flex;
         flex-direction: column;
 
         .categoryButton {
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: flex-start;
             padding: 0 2px;
             margin: 0 6px;
             height: 28px;
+            width: calc(100% - 12px);
             background: transparent;
             border: none;
             cursor: pointer;
