@@ -2,13 +2,12 @@
     position: absolute;
     top: 100%;
     left: 0;
-    width: 550px;
-    background: #ebebeb;
-    border: 1px solid #dbdbdb;
+    width: 450px;
+    background: #cecece;
+    border: 1px solid #828282;
     border-radius: 2px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100;
-    font-family: sans-serif;
     color: #3c3c3c;
 
     .content {
@@ -20,6 +19,9 @@
         flex: 1;
         overflow-y: auto;
         padding: 8px;
+        margin-left: 7px;
+        background: #ebebeb;
+        border: 1px solid #828282;
 
         ul {
             list-style: none;
@@ -44,10 +46,7 @@
                     }
 
                     .appIcon {
-                        font-size: 32px;
                         margin-right: 12px;
-                        width: 32px;
-                        height: 32px;
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -93,69 +92,69 @@
     }
 
     .sidebar {
-        width: 150px;
-        background: #f2f1f0;
-        border-left: 1px solid #dbdbdb;
+        width: 140px;
+        background: #cecece;
         display: flex;
         flex-direction: column;
 
         .categoryButton {
+            position: relative;
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            justify-content: flex-start;
+            padding: 0 2px;
+            margin: 0 6px;
+            height: 28px;
             background: transparent;
             border: none;
             cursor: pointer;
             transition: background 0.2s;
-            font-size: 11px;
+            font-size: 0.75rem;
             color: #3c3c3c;
-
-            .categoryIcon {
-                font-size: 22px;
-                margin-right: 8px;
-                width: 22px;
-                height: 22px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .categoryLabel {
-                flex: 1;
-            }
+            border: 1px solid transparent;
+            gap: 4px;
 
             &:hover {
-                background: #dfdfdf;
+                background: #e5e5e5;
+                border: 1px solid #828282;
+                border-radius: 4px;
             }
 
             &.selected {
-                background: #5294e2;
-                color: #ffffff;
+                background: #b1b1b1;
+                border: 1px solid #828282;
+                border-radius: 4px;
 
                 .categoryIcon {
                     color: #ffffff;
                 }
             }
         }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background: #bababa;
+            margin: 5px auto;
+            width: 127px;
+        }
     }
 
-    .bottomBar {
+    .topBar {
         display: flex;
         align-items: center;
-        border-top: 1px solid #dbdbdb;
-        background: #ebebeb;
+        justify-content: space-between;
+        background: #cecece;
         height: 40px;
         padding: 0 8px;
 
         .user {
             display: flex;
             align-items: center;
-            width: 150px;
-            font-size: 11px;
-            color: #707070;
+            font-size: 1rem;
+            gap: 0.5rem;
 
             .userAvatar {
-                font-size: 24px;
                 margin-right: 8px;
             }
 
@@ -164,44 +163,9 @@
             }
         }
 
-        .searchBar {
-            flex: 1;
-            padding: 0 8px;
-
-            .visuallyHidden {
-                position: absolute !important;
-                height: 1px;
-                width: 1px;
-                overflow: hidden;
-                clip: rect(1px, 1px, 1px, 1px);
-                white-space: nowrap;
-            }
-
-            input {
-                width: 100%;
-                padding: 6px 8px;
-                border: 1px solid #dbdbdb;
-                border-radius: 4px;
-                background: #ffffff;
-                font-size: 12px;
-                color: #3c3c3c;
-
-                &:focus {
-                    outline: none;
-                    border-color: #5294e2;
-                    box-shadow: 0 0 0 1px #5294e2;
-                }
-
-                &::placeholder {
-                    color: transparent;
-                }
-            }
-        }
-
         .commands {
             display: flex;
             justify-content: flex-end;
-            width: 100px;
 
             .commandButton {
                 background: transparent;
@@ -215,6 +179,48 @@
                     color: #3c3c3c;
                 }
             }
+        }
+    }
+    .searchBar {
+        padding: 7px;
+        background: #cecece;
+        position: relative;
+
+        .searchIcon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        input {
+            width: 100%;
+            padding: 6px 8px 6px 24px;
+            border: 1px solid #828282;
+            border-radius: 3px;
+            background: #ffffff;
+            font-size: 12px;
+            color: #3c3c3c;
+            transition: all 0.2s;
+
+            &:focus {
+                outline: none;
+                border-color: #398ee7;
+            }
+
+            &::placeholder {
+                color: transparent;
+            }
+        }
+
+        .visuallyHidden {
+            position: absolute !important;
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+            clip: rect(1px, 1px, 1px, 1px);
+            white-space: nowrap;
         }
     }
 }

@@ -4,6 +4,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import styles from "./menu.module.scss";
 import { useDesktop } from "../Desktop/DesktopContext";
 import { AppName, desktopApps } from "../Desktop/appData";
+import Image from "next/image";
 
 type MenuProps = {
   onClose: () => void;
@@ -38,16 +39,28 @@ export default function Menu({ onClose }: MenuProps) {
   }));
 
   const categories: Category[] = [
-    { id: "favorites", name: "Favorites", icon: "⭐" },
-    { id: "recently-used", name: "Recently Used", icon: "🕒" },
-    { id: "all", name: "All Applications", icon: "📂" },
-    { id: "accessories", name: "Accessories", icon: "🛠️" },
-    { id: "graphics", name: "Graphics", icon: "🎨" },
-    { id: "internet", name: "Internet", icon: "🌐" },
-    { id: "multimedia", name: "Multimedia", icon: "🎥" },
-    { id: "office", name: "Office", icon: "📄" },
-    { id: "settings", name: "Settings", icon: "⚙️" },
-    { id: "system", name: "System", icon: "💻" },
+    { id: "favorites", name: "Favorites", icon: "/system/starred.svg" },
+    {
+      id: "recently-used",
+      name: "Recently Used",
+      icon: "/system/folder-recent.svg",
+    },
+    {
+      id: "all",
+      name: "All Applications",
+      icon: "/system/applications-other.svg",
+    },
+    {
+      id: "accessories",
+      name: "Accessories",
+      icon: "/system/applications-accessories.svg",
+    },
+    {
+      id: "settings",
+      name: "Settings",
+      icon: "/system/preferences-desktop.svg",
+    },
+    { id: "system", name: "System", icon: "/system/preferences-system.svg" },
   ];
 
   // Filter apps based on search and category
@@ -86,6 +99,48 @@ export default function Menu({ onClose }: MenuProps) {
 
   return (
     <div className={styles.menu}>
+      <div className={styles.topBar}>
+        <div className={styles.user}>
+          <Image
+            src="/system/preferences-desktop-personal.svg"
+            alt="Profile"
+            width={32}
+            height={32}
+            className={styles.categoryIcon}
+          />
+          <span className={styles.userName}>Kevin</span>
+        </div>
+        <div className={styles.commands}>
+          <button className={styles.commandButton}>
+            <Image
+              src="/system/preferences-desktop.svg"
+              alt="Settings Manager"
+              width={24}
+              height={24}
+              className={styles.categoryIcon}
+            />
+          </button>
+          <button className={styles.commandButton}>
+            <Image
+              src="/system/system-lock-screen.svg"
+              alt="Lock Screen"
+              width={24}
+              height={24}
+              className={styles.categoryIcon}
+            />
+          </button>
+          <button className={styles.commandButton}>
+            <Image
+              src="/system/system-log-out.svg"
+              alt="Log Out..."
+              width={24}
+              height={24}
+              className={styles.categoryIcon}
+            />
+          </button>
+        </div>
+      </div>
+
       <div className={styles.content}>
         <div className={styles.appsList}>
           <ul>
@@ -110,42 +165,44 @@ export default function Menu({ onClose }: MenuProps) {
 
         <div className={styles.sidebar}>
           {categories.map(cat => (
-            <button
-              key={cat.id}
-              className={`${styles.categoryButton} ${
-                selectedCategory === cat.id ? styles.selected : ""
-              }`}
-              onClick={() => setSelectedCategory(cat.id)}>
-              <span className={styles.categoryIcon}>{cat.icon}</span>
-              <span className={styles.categoryLabel}>{cat.name}</span>
-            </button>
+            <>
+              <button
+                key={cat.id}
+                className={`${styles.categoryButton} ${
+                  selectedCategory === cat.id ? styles.selected : ""
+                }`}
+                onClick={() => setSelectedCategory(cat.id)}>
+                <Image
+                  src={cat.icon}
+                  alt={cat.name}
+                  width={18}
+                  height={18}
+                  className={styles.categoryIcon}
+                />
+                <span className={styles.categoryLabel}>{cat.name}</span>
+              </button>
+
+              {cat.id === "all" && <hr className={styles.divider} />}
+            </>
           ))}
         </div>
       </div>
 
-      <div className={styles.bottomBar}>
-        <div className={styles.user}>
-          <span className={styles.userAvatar}>👤</span>
-          <span className={styles.userName}>Kevin</span>
-        </div>
-        <div className={styles.searchBar}>
-          <label htmlFor="menuSearch" className={styles.visuallyHidden}>
-            Search applications
-          </label>
-          <input
-            id="menuSearch"
-            ref={searchRef}
-            type="text"
-            placeholder="Search…"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className={styles.commands}>
-          <button className={styles.commandButton}>🔄</button>
-          <button className={styles.commandButton}>🔒</button>
-          <button className={styles.commandButton}>⏻</button>
-        </div>
+      <div className={styles.searchBar}>
+        <Image
+          src="/system/edit-find-symbolic.svg"
+          alt="Search"
+          className={styles.searchIcon}
+          width={16}
+          height={16}
+        />
+        <input
+          id="menuSearch"
+          ref={searchRef}
+          type="text"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
       </div>
     </div>
   );
