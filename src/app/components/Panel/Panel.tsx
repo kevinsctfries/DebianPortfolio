@@ -24,7 +24,12 @@ export default function Panel() {
           console.log("Panel menu button clicked, before:", menuOpen);
           setMenuOpen(!menuOpen);
         }}>
-        🐭
+        <Image
+          src="/system/distributor-logo-xubuntu.svg"
+          alt="Open Menu"
+          width={32}
+          height={32}
+        />
       </button>
 
       {menuOpen && (
