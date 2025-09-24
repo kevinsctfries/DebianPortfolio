@@ -9,6 +9,9 @@ type DesktopContextType = {
   closeApp: (app: AppName) => void;
 };
 
+export const GRID_SIZE = 80;
+export const PANEL_HEIGHT = 40;
+
 const DesktopContext = createContext<DesktopContextType | null>(null);
 
 export function DesktopProvider({ children }: { children: ReactNode }) {

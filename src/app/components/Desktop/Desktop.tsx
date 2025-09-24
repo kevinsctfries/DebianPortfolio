@@ -1,13 +1,11 @@
 "use client";
 
 import styles from "./desktop.module.scss";
-import { useDesktop } from "./DesktopContext";
+import { GRID_SIZE, useDesktop } from "./DesktopContext";
 import Window from "./Window";
 import DesktopIcon from "./DesktopIcon";
 import { useState } from "react";
 import { desktopApps } from "./appData";
-
-const GRID_SIZE = 80;
 
 export default function Desktop() {
   const { openApps, openApp, closeApp } = useDesktop();

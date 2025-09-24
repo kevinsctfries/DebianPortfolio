@@ -3,6 +3,7 @@
 import { Rnd } from "react-rnd";
 import styles from "./desktop.module.scss";
 import Image from "next/image";
+import { GRID_SIZE } from "./DesktopContext";
 
 type DesktopIconProps = {
   name: string;
@@ -33,9 +34,8 @@ export default function DesktopIcon({
         onDrag?.(d.x, d.y);
       }}
       onDragStop={(e, d) => {
-        const gridSize = 80;
-        const snappedX = Math.round(d.x / gridSize) * gridSize;
-        const snappedY = Math.round(d.y / gridSize) * gridSize;
+        const snappedX = Math.round(d.x / GRID_SIZE) * GRID_SIZE;
+        const snappedY = Math.round(d.y / GRID_SIZE) * GRID_SIZE;
         onDragStop?.(snappedX, snappedY);
       }}>
       <div className={styles.desktopIcon} onDoubleClick={onClick}>
