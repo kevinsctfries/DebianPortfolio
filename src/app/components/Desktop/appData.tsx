@@ -1,3 +1,7 @@
+import About from "@/app/apps/About/About";
+import Terminal from "@/app/apps/Terminal/Terminal";
+import Minesweeper from "@/app/apps/Minesweeper/Minesweeper";
+
 export type AppName = "about" | "terminal" | "minesweeper";
 
 export type DesktopApp = {
@@ -6,6 +10,7 @@ export type DesktopApp = {
   icon: string;
   desc?: string;
   category?: string;
+  component: React.ReactNode;
 };
 
 export const desktopApps: DesktopApp[] = [
@@ -13,21 +18,18 @@ export const desktopApps: DesktopApp[] = [
     id: "about",
     name: "About",
     icon: "/gnome-info.webp",
-    desc: "About this system",
-    category: "settings",
+    component: <About />,
   },
   {
     id: "terminal",
     name: "Terminal",
     icon: "/gnome-eterm.webp",
-    desc: "Command line interface",
-    category: "system",
+    component: <Terminal />,
   },
   {
     id: "minesweeper",
     name: "Minesweeper",
     icon: "/minesweeper.webp",
-    desc: "Classic game",
-    category: "games",
+    component: <Minesweeper />,
   },
 ];

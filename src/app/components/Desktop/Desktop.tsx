@@ -16,19 +16,6 @@ const PANEL_HEIGHT = 40;
 export default function Desktop() {
   const { openApps, openApp, closeApp } = useDesktop();
 
-  const renderAppComponent = (appId: AppName) => {
-    switch (appId) {
-      case "about":
-        return <About />;
-      case "terminal":
-        return <Terminal />;
-      case "minesweeper":
-        return <Minesweeper />;
-      default:
-        return null;
-    }
-  };
-
   const [iconPositions, setIconPositions] = useState<
     Record<string, { x: number; y: number }>
   >(() =>
@@ -95,17 +82,22 @@ export default function Desktop() {
         />
       ))}
 
-      {openApps.map(appId => (
-        <Window
-          key={appId}
-          title={appId}
-          onClose={() => closeApp(appId)}
-          fixedSize={appId === "minesweeper"}
-          width={appId === "minesweeper" ? 400 : undefined}
-          height={appId === "minesweeper" ? 435 : undefined}>
-          {renderAppComponent(appId)}
-        </Window>
-      ))}
+      {openApps.map(appId => {
+        const app = desktopApps.find(a => a.id === appId);
+        if (!app) return null;
+
+        return (
+          <Window
+            key={appId}
+            title={appId}
+            onClose={() => closeApp(appId)}
+            fixedSize={appId === "minesweeper"}
+            width={appId === "minesweeper" ? 400 : undefined}
+            height={appId === "minesweeper" ? 435 : undefined}>
+            {app.component}
+          </Window>
+        );
+      })}
     </div>
   );
 }
