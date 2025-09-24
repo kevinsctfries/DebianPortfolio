@@ -28,6 +28,7 @@ export default function DesktopIcon({
       position={{ x, y }}
       size={{ width: 64, height: 64 }}
       bounds="parent"
+      enableResizing={false}
       onDrag={(e, d) => {
         onDrag?.(d.x, d.y);
       }}
