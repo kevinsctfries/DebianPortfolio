@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import styles from "./panel.module.scss";
 import Menu from "./Menu";
 import { useDesktop } from "../Desktop/DesktopContext";
@@ -10,6 +12,20 @@ import { desktopApps } from "../Desktop/appData";
 export default function Panel() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { openApps, openApp } = useDesktop();
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      const zonedTime = toZonedTime(
+        now,
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+      );
+      setTime(zonedTime);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  });
 
   const getAppIcon = (appId: string) => {
     const app = desktopApps.find(a => a.id === appId);
@@ -53,6 +69,8 @@ export default function Panel() {
           </button>
         ))}
       </div>
+
+      <div className={styles.clock}>{format(time, "MMM dd, hh:mm:ss a")}</div>
     </div>
   );
 }
