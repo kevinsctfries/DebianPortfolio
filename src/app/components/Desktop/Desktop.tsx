@@ -3,12 +3,9 @@
 import styles from "./desktop.module.scss";
 import { useDesktop } from "./DesktopContext";
 import Window from "./Window";
-import About from "../../apps/About/About";
-import Terminal from "../../apps/Terminal/Terminal";
-import Minesweeper from "../../apps/Minesweeper/Minesweeper";
 import DesktopIcon from "./DesktopIcon";
 import { useState } from "react";
-import { desktopApps, AppName } from "./appData";
+import { desktopApps } from "./appData";
 
 const GRID_SIZE = 80;
 const PANEL_HEIGHT = 40;
