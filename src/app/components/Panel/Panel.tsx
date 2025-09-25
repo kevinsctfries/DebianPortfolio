@@ -11,7 +11,7 @@ import { desktopApps } from "../Desktop/appData";
 
 export default function Panel() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { openApps, openApp } = useDesktop();
+  const { openApps, openApp, activeApp, bringToFront } = useDesktop();
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function Panel() {
     }, 1000);
 
     return () => clearInterval(timer);
-  });
+  }, []);
 
   const getAppIcon = (appId: string) => {
     const app = desktopApps.find(a => a.id === appId);
@@ -61,8 +61,13 @@ export default function Panel() {
         {openApps.map(appId => (
           <button
             key={appId}
-            className={styles.appButton}
-            onClick={() => openApp(appId)}
+            className={`${styles.appButton} ${
+              activeApp === appId ? styles.active : ""
+            }`}
+            onClick={() => {
+              if (activeApp !== appId) bringToFront(appId);
+              else bringToFront(appId);
+            }}
             title={appId}>
             <Image src={getAppIcon(appId)} alt={appId} width={20} height={20} />
             <span className={styles.appName}>{appId}</span>

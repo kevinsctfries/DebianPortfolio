@@ -9,6 +9,7 @@ type DesktopContextType = {
   closeApp: (app: AppName) => void;
   bringToFront: (app: AppName) => void;
   getZIndex: (app: AppName) => number;
+  activeApp: AppName | null;
 };
 
 export const GRID_SIZE = 80;
@@ -22,6 +23,15 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
     {}
   );
   const [topZ, setTopZ] = useState(1);
+
+  const activeApp =
+    openApps.length > 0
+      ? openApps.reduce((top, app) =>
+          (zIndexes[app] ?? -Infinity) > (zIndexes[top] ?? -Infinity)
+            ? app
+            : top
+        )
+      : null;
 
   function openApp(app: AppName) {
     if (!openApps.includes(app)) {
@@ -51,7 +61,14 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
 
   return (
     <DesktopContext.Provider
-      value={{ openApps, openApp, closeApp, bringToFront, getZIndex }}>
+      value={{
+        openApps,
+        openApp,
+        closeApp,
+        bringToFront,
+        getZIndex,
+        activeApp,
+      }}>
       {children}
     </DesktopContext.Provider>
   );

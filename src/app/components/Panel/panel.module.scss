@@ -34,7 +34,7 @@
     .openedApps {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
         margin-left: 0.5rem;
 
         .appButton {
@@ -42,7 +42,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 6px;
-            background: inherit;
+            background: transparent;
             border: none;
             cursor: pointer;
             padding: 2px 6px;
@@ -59,7 +59,12 @@
                 }
             }
 
-            &:active {
+            &.active {
+                background: var(--theme-selected-bg-color);
+
+                .appName {
+                    color: var(--theme-selected-fg-color);
+                }
             }
 
             .appName {
