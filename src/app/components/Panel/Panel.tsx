@@ -37,9 +37,8 @@ export default function Panel() {
   return (
     <div className={styles.panel}>
       <button
-        className={styles.menuButton}
+        className={`${styles.menuButton} ${menuOpen ? styles.active : ""}`}
         onClick={() => {
-          console.log("Panel menu button clicked, before:", menuOpen);
           setMenuOpen(!menuOpen);
         }}>
         <Image src={menuIcon} alt="Open Menu" width={18} height={18} />

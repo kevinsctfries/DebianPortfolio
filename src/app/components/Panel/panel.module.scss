@@ -18,6 +18,10 @@
         &:hover {
             background: var(--theme-selected-bg-color);
         }
+
+        &.active {
+            background: rgb(from var(--theme-unfocused-fg-color) r g b / 0.45);
+        }
     }
 
     .spacer {
