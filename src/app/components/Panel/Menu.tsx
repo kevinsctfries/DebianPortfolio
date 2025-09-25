@@ -6,6 +6,22 @@ import { useDesktop } from "../Desktop/DesktopContext";
 import { AppName, desktopApps } from "../Desktop/appData";
 import Image from "next/image";
 
+import { StaticImageData } from "next/image";
+
+// category icons
+import favoritesIcon from "../../assets/system/starred.svg";
+import recentlyUsed from "../../assets/system/folder-recent.svg";
+import allApplications from "../../assets/system/applications-other.svg";
+import accessoriesApps from "../../assets/system/applications-accessories.svg";
+import settingsApp from "../../assets/system/preferences-desktop.svg";
+import systemIcon from "../../assets/system/preferences-system.svg";
+
+// other menu icons
+import profileIcon from "../../assets/system/preferences-desktop-personal.svg";
+import lockscreenIcon from "../../assets/system/system-lock-screen.svg";
+import logoutIcon from "../../assets/system/system-log-out.svg";
+import searchIcon from "../../assets/system/edit-find-symbolic.svg";
+
 type MenuProps = {
   onClose: () => void;
 };
@@ -15,7 +31,7 @@ type AppEntry = {
   name: string;
   desc: string;
   category: string;
-  icon: string;
+  icon: string | StaticImageData;
 };
 
 type Category = {
@@ -39,28 +55,28 @@ export default function Menu({ onClose }: MenuProps) {
   }));
 
   const categories: Category[] = [
-    { id: "favorites", name: "Favorites", icon: "/system/starred.svg" },
+    { id: "favorites", name: "Favorites", icon: favoritesIcon },
     {
       id: "recently-used",
       name: "Recently Used",
-      icon: "/system/folder-recent.svg",
+      icon: recentlyUsed,
     },
     {
       id: "all",
       name: "All Applications",
-      icon: "/system/applications-other.svg",
+      icon: allApplications,
     },
     {
       id: "accessories",
       name: "Accessories",
-      icon: "/system/applications-accessories.svg",
+      icon: accessoriesApps,
     },
     {
       id: "settings",
       name: "Settings",
-      icon: "/system/preferences-desktop.svg",
+      icon: settingsApp,
     },
-    { id: "system", name: "System", icon: "/system/preferences-system.svg" },
+    { id: "system", name: "System", icon: systemIcon },
   ];
 
   // Filter apps based on search and category
@@ -102,7 +118,7 @@ export default function Menu({ onClose }: MenuProps) {
       <div className={styles.topBar}>
         <div className={styles.user}>
           <Image
-            src="/system/preferences-desktop-personal.svg"
+            src={profileIcon}
             alt="Profile"
             width={32}
             height={32}
@@ -113,7 +129,7 @@ export default function Menu({ onClose }: MenuProps) {
         <div className={styles.commands}>
           <button className={styles.commandButton}>
             <Image
-              src="/system/preferences-desktop.svg"
+              src={settingsApp}
               alt="Settings Manager"
               width={24}
               height={24}
@@ -122,7 +138,7 @@ export default function Menu({ onClose }: MenuProps) {
           </button>
           <button className={styles.commandButton}>
             <Image
-              src="/system/system-lock-screen.svg"
+              src={lockscreenIcon}
               alt="Lock Screen"
               width={24}
               height={24}
@@ -131,7 +147,7 @@ export default function Menu({ onClose }: MenuProps) {
           </button>
           <button className={styles.commandButton}>
             <Image
-              src="/system/system-log-out.svg"
+              src={logoutIcon}
               alt="Log Out..."
               width={24}
               height={24}
@@ -192,7 +208,7 @@ export default function Menu({ onClose }: MenuProps) {
 
       <div className={styles.searchBar}>
         <Image
-          src="/system/edit-find-symbolic.svg"
+          src={searchIcon}
           alt="Search"
           className={styles.searchIcon}
           width={16}

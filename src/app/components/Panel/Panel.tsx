@@ -9,6 +9,8 @@ import { useDesktop } from "../Desktop/DesktopContext";
 import Image from "next/image";
 import { desktopApps } from "../Desktop/appData";
 
+import menuIcon from "../../assets/system/distributor-logo-xubuntu.svg";
+
 export default function Panel() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { openApps, openApp, activeApp, bringToFront } = useDesktop();
@@ -40,12 +42,7 @@ export default function Panel() {
           console.log("Panel menu button clicked, before:", menuOpen);
           setMenuOpen(!menuOpen);
         }}>
-        <Image
-          src="/system/distributor-logo-xubuntu.svg"
-          alt="Open Menu"
-          width={18}
-          height={18}
-        />
+        <Image src={menuIcon} alt="Open Menu" width={18} height={18} />
       </button>
 
       {menuOpen && (
