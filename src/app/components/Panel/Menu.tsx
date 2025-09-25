@@ -162,9 +162,6 @@ export default function Menu({ onClose }: MenuProps) {
                 </button>
               </li>
             ))}
-            {getAppsForCategory().length === 0 && (
-              <li className={styles.noResults}>No applications found</li>
-            )}
           </ul>
         </div>
 

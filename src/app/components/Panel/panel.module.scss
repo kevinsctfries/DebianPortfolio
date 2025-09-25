@@ -4,7 +4,7 @@
     height: 2.5rem;
     display: flex;
     align-items: center;
-    background: #2b2b2b;
+    background: var(--theme-panel-bg);
 
     .menuButton {
         display: flex;
@@ -16,7 +16,7 @@
         border: none;
 
         &:hover {
-            background: #398ee7;
+            background: var(--theme-selected-bg-color);
         }
     }
 
@@ -42,7 +42,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 6px;
-            background: var(--muted);
+            background: inherit;
             border: none;
             cursor: pointer;
             padding: 2px 6px;
@@ -52,12 +52,19 @@
             height: 2rem;
 
             &:hover {
-                background: #555753;
+                background: var(--theme-selected-bg-color);
+
+                .appName {
+                    color: var(--theme-selected-fg-color);
+                }
+            }
+
+            &:active {
             }
 
             .appName {
                 font-size: 12px;
-                color: #fff;
+                color: var(--theme-unfocused-fg-color);
                 white-space: nowrap;
             }
         }

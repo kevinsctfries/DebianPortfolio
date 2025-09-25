@@ -8,12 +8,35 @@
 }
 
 :root {
-  --background: #2e3436;
-  --foreground: #eeeeec;
-  --accent: #3465a4;
-  --muted: #555753;
-  --window-bg: #d3d7cf;
-  --window-border: #888a85;
+  --theme-panel-bg: #242424;
+  --theme-fg-color: #3c3c3c;
+  --theme-text-color: #212121;
+  --theme-bg-color: #cecece;
+  --theme-base-color: #fcfcfc;
+  --theme-selected-bg-color: #398ee7;
+  --theme-selected-fg-color: #ffffff;
+  --theme-unfocused-fg-color: #858585;
+  --borders: #828282;
+  --hover-bg-color: #e8e8e8;
+  --active-bg-color: #b5b5b5;
+  --wm-title: #6c6c6c;
+  --wm-unfocused-title: #858585;
+  --wm-highlight: rgba(255, 255, 255, 0.8);
+  --wm-borders-edge: rgba(255, 255, 255, 0.8);
+  --wm-bg-a: #f7f7f7;
+  --wm-bg-b: #cecece;
+  --wm-shadow: rgba(0, 0, 0, 0.35);
+  --wm-border: rgba(0, 0, 0, 0.18);
+  --wm-button-hover-color-a: #ffffff;
+  --wm-button-hover-color-b: #cecece;
+  --wm-button-active-color-a: #afafaf;
+  --wm-button-active-color-b: #b7b7b7;
+  --wm-button-active-color-c: #b9b9b9;
+  --content-view-bg: #fcfcfc;
+  --hover-bg-color: #e8e8e8;
+  --active-bg-color: #b5b5b5;
+  --backdrop-active-bg-color: #b6b6b6;
+  --disabled-active-bg-color: #d7d7d7;
 }
 
 html,
@@ -21,7 +44,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: var(--background);
-  color: var(--foreground);
+  color: var(--theme-base-color);
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
