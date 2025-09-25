@@ -35,7 +35,7 @@
         display: flex;
         align-items: center;
         gap: 2px;
-        margin-left: 0.5rem;
+        margin-left: 0.75rem;
 
         .appButton {
             display: flex;
@@ -45,14 +45,14 @@
             background: transparent;
             border: none;
             cursor: pointer;
-            padding: 2px 6px;
+            padding: 0 2px;
             border-radius: 2px;
             min-width: 185px;
             text-align: left;
             height: 24px;
 
             &:hover {
-                background: var(--theme-selected-bg-color);
+                background: #2c6db2;
 
                 .appName {
                     color: var(--theme-selected-fg-color);
@@ -60,7 +60,7 @@
             }
 
             &.active {
-                background: var(--theme-selected-bg-color);
+                background: #2c4866;
 
                 .appName {
                     color: var(--theme-selected-fg-color);
