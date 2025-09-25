@@ -8,6 +8,8 @@ type WindowProps = {
   title: string;
   children: ReactNode;
   onClose?: () => void;
+  onFocus?: () => void;
+  zIndex?: number;
   defaultX?: number;
   defaultY?: number;
   width?: number;
@@ -19,6 +21,8 @@ export default function Window({
   title,
   children,
   onClose,
+  onFocus,
+  zIndex = 1,
   defaultX = 100,
   defaultY = 100,
   width = 400,
@@ -38,7 +42,9 @@ export default function Window({
       bounds="parent"
       dragHandleClassName={styles.titlebar}
       enableResizing={fixedSize ? false : undefined}
-      className={styles.window}>
+      className={styles.window}
+      style={{ zIndex }}
+      onMouseDown={onFocus}>
       <div className={styles.inner}>
         <div className={styles.titlebar}>
           <span>{title}</span>

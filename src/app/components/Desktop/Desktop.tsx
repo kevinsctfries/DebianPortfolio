@@ -8,7 +8,7 @@ import { useState } from "react";
 import { desktopApps } from "./appData";
 
 export default function Desktop() {
-  const { openApps, openApp, closeApp } = useDesktop();
+  const { openApps, openApp, closeApp, bringToFront, getZIndex } = useDesktop();
 
   const [iconPositions, setIconPositions] = useState<
     Record<string, { x: number; y: number }>
@@ -67,7 +67,9 @@ export default function Desktop() {
             onClose={() => closeApp(appId)}
             fixedSize={appId === "minesweeper"}
             width={appId === "minesweeper" ? 400 : undefined}
-            height={appId === "minesweeper" ? 435 : undefined}>
+            height={appId === "minesweeper" ? 435 : undefined}
+            zIndex={getZIndex(appId)}
+            onFocus={() => bringToFront(appId)}>
             {app.component}
           </Window>
         );
