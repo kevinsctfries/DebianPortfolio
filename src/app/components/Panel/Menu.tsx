@@ -4,9 +4,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import styles from "./menu.module.scss";
 import { useDesktop } from "../Desktop/DesktopContext";
 import { AppName, desktopApps } from "../Desktop/appData";
-import Image from "next/image";
-
-import { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 // category icons
 import favoritesIcon from "../../assets/system/starred.svg";
@@ -44,7 +42,9 @@ export default function Menu({ onClose }: MenuProps) {
   const { openApp } = useDesktop();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("favorites");
+
   const searchRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const apps: AppEntry[] = desktopApps.map(app => ({
     id: app.id,
@@ -108,13 +108,39 @@ export default function Menu({ onClose }: MenuProps) {
     searchRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // close when any window signals it was interacted with
+    function handleWindowInteracted() {
+      onClose();
+    }
+    document.addEventListener(
+      "desktop-window-interacted",
+      handleWindowInteracted
+    );
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "desktop-window-interacted",
+        handleWindowInteracted
+      );
+    };
+  }, [onClose]);
+
   const handleAppClick = (appId: AppName) => {
     openApp(appId);
     onClose();
   };
 
   return (
-    <div className={styles.menu}>
+    <div className={styles.menu} ref={menuRef}>
       <div className={styles.topBar}>
         <div className={styles.user}>
           <Image

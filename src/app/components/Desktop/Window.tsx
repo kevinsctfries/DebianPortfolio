@@ -44,7 +44,18 @@ export default function Window({
       enableResizing={fixedSize ? false : undefined}
       className={styles.window}
       style={{ zIndex }}
-      onMouseDown={onFocus}>
+      onMouseDown={() => {
+        onFocus?.();
+        try {
+          document.dispatchEvent(
+            new CustomEvent("desktop-window-interacted", {
+              detail: { title },
+            })
+          );
+        } catch {
+          document.dispatchEvent(new Event("desktop-window-interacted"));
+        }
+      }}>
       <div className={styles.inner}>
         <div className={styles.titlebar}>
           <span>{title}</span>
