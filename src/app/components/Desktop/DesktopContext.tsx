@@ -10,7 +10,7 @@ type DesktopContextType = {
 };
 
 export const GRID_SIZE = 80;
-export const PANEL_HEIGHT = 40;
+export const PANEL_HEIGHT = 24;
 
 const DesktopContext = createContext<DesktopContextType | null>(null);
 

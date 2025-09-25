@@ -1,7 +1,7 @@
 .panel {
     position: relative;
     z-index: 60;
-    height: 2.5rem;
+    height: 24px;
     display: flex;
     align-items: center;
     background: var(--theme-panel-bg);
@@ -10,7 +10,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2.5rem;
+        width: 24px;
         height: 100%;
         background: transparent;
         border: none;
@@ -35,7 +35,7 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        margin-left: 1rem;
+        margin-left: 0.5rem;
 
         .appButton {
             display: flex;
@@ -47,9 +47,9 @@
             cursor: pointer;
             padding: 2px 6px;
             border-radius: 2px;
-            min-width: 120px;
+            min-width: 185px;
             text-align: left;
-            height: 2rem;
+            height: 24px;
 
             &:hover {
                 background: var(--theme-selected-bg-color);

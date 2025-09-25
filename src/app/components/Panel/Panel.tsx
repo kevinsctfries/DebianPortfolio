@@ -43,8 +43,8 @@ export default function Panel() {
         <Image
           src="/system/distributor-logo-xubuntu.svg"
           alt="Open Menu"
-          width={32}
-          height={32}
+          width={18}
+          height={18}
         />
       </button>
 
