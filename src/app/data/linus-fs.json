@@ -1,0 +1,189 @@
+{
+  "/": {
+    "type": "directory",
+    "description": "Root directory",
+    "contents": {
+      "bin": {
+        "type": "directory",
+        "description": "Essential command binaries",
+        "contents": {
+          "ls": { "type": "file", "description": "List directory contents" },
+          "cat": {
+            "type": "file",
+            "description": "Concatenate and display files"
+          },
+          "cp": { "type": "file", "description": "Copy files and directories" }
+        }
+      },
+      "boot": {
+        "type": "directory",
+        "description": "Boot loader files",
+        "contents": {
+          "grub": {
+            "type": "directory",
+            "description": "GRUB bootloader configuration",
+            "contents": {
+              "grub.cfg": {
+                "type": "file",
+                "description": "GRUB configuration file"
+              }
+            }
+          }
+        }
+      },
+      "dev": {
+        "type": "directory",
+        "description": "Device files",
+        "contents": {
+          "sda": { "type": "file", "description": "First disk device" }
+        }
+      },
+      "etc": {
+        "type": "directory",
+        "description": "System configuration files",
+        "contents": {
+          "passwd": {
+            "type": "file",
+            "description": "User account information"
+          }
+        }
+      },
+      "home": {
+        "type": "directory",
+        "description": "User home directories",
+        "contents": {
+          "user": {
+            "type": "directory",
+            "description": "Home directory for user",
+            "contents": {
+              ".bashrc": {
+                "type": "file",
+                "description": "Bash shell configuration"
+              },
+              "Desktop": {
+                "type": "directory",
+                "description": "User desktop files"
+              },
+              "Documents": {
+                "type": "directory",
+                "description": "User documents"
+              },
+              "Downloads": {
+                "type": "directory",
+                "description": "User downloads"
+              },
+              "Music": {
+                "type": "directory",
+                "description": "User music files"
+              },
+              "Pictures": {
+                "type": "directory",
+                "description": "User image files"
+              },
+              "Videos": {
+                "type": "directory",
+                "description": "User video files"
+              },
+              "Templates": {
+                "type": "directory",
+                "description": "User template files"
+              },
+              "Public": {
+                "type": "directory",
+                "description": "User public files"
+              }
+            }
+          }
+        }
+      },
+      "lib": {
+        "type": "directory",
+        "description": "Shared libraries",
+        "contents": {}
+      },
+      "media": {
+        "type": "directory",
+        "description": "Mount points for removable media",
+        "contents": {
+          "cdrom": { "type": "directory", "description": "CD-ROM mount point" }
+        }
+      },
+      "mnt": {
+        "type": "directory",
+        "description": "Mount points for temporary mounts",
+        "contents": {}
+      },
+      "opt": {
+        "type": "directory",
+        "description": "Optional software packages",
+        "contents": {}
+      },
+      "proc": {
+        "type": "directory",
+        "description": "Process information pseudo-filesystem",
+        "contents": {}
+      },
+      "root": {
+        "type": "directory",
+        "description": "Root user home directory",
+        "contents": {}
+      },
+      "run": {
+        "type": "directory",
+        "description": "Run-time variable data",
+        "contents": {}
+      },
+      "sbin": {
+        "type": "directory",
+        "description": "System binaries",
+        "contents": {}
+      },
+      "snap": {
+        "type": "directory",
+        "description": "Snap packages (Ubuntu-specific)",
+        "contents": {}
+      },
+      "srv": {
+        "type": "directory",
+        "description": "Service data",
+        "contents": {}
+      },
+      "sys": {
+        "type": "directory",
+        "description": "System information pseudo-filesystem",
+        "contents": {}
+      },
+      "tmp": {
+        "type": "directory",
+        "description": "Temporary files",
+        "contents": {}
+      },
+      "usr": {
+        "type": "directory",
+        "description": "User utilities and applications",
+        "contents": {
+          "bin": {
+            "type": "directory",
+            "description": "User command binaries"
+          },
+          "lib": { "type": "directory", "description": "User libraries" },
+          "share": {
+            "type": "directory",
+            "description": "Architecture-independent data"
+          }
+        }
+      },
+      "var": {
+        "type": "directory",
+        "description": "Variable data",
+        "contents": {
+          "log": { "type": "directory", "description": "Log files" },
+          "cache": {
+            "type": "directory",
+            "description": "Application cache data"
+          }
+        }
+      }
+    }
+  }
+}
