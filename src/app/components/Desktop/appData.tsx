@@ -1,14 +1,16 @@
 import About from "@/app/apps/About/About";
 import Terminal from "@/app/apps/Terminal/Terminal";
 import Minesweeper from "@/app/apps/Minesweeper/Minesweeper";
+import FileExplorer from "@/app/apps/FileExplorer/FileExplorer";
 
 import minesweeperIcon from "../../assets/apps/minesweeper.webp";
 import terminalIcon from "../../assets/apps/utilities-terminal.svg";
 import aboutIcon from "../../assets/apps/dialog-information.svg";
+import folderIcon from "../../assets/system/system-file-manager.svg";
 
 import type { StaticImageData } from "next/image";
 
-export type AppName = "about" | "terminal" | "minesweeper";
+export type AppName = "about" | "terminal" | "minesweeper" | "thunar";
 
 export type DesktopApp = {
   id: AppName;
@@ -37,5 +39,11 @@ export const desktopApps: DesktopApp[] = [
     name: "Minesweeper",
     icon: minesweeperIcon,
     component: <Minesweeper />,
+  },
+  {
+    id: "thunar",
+    name: "Thunar",
+    icon: folderIcon,
+    component: <FileExplorer />,
   },
 ];
