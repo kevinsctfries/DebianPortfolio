@@ -14,17 +14,22 @@ import menuIcon from "../../assets/system/distributor-logo-xubuntu.svg";
 export default function Panel() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { openApps, openApp, activeApp, bringToFront } = useDesktop();
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState<Date | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    setMounted(true);
+    const updateTime = () => {
       const now = new Date();
       const zonedTime = toZonedTime(
         now,
         Intl.DateTimeFormat().resolvedOptions().timeZone
       );
       setTime(zonedTime);
-    }, 1000);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -71,7 +76,9 @@ export default function Panel() {
         ))}
       </div>
 
-      <div className={styles.clock}>{format(time, "MMM dd, hh:mm:ss a")}</div>
+      <div className={styles.clock}>
+        {mounted && time ? format(time, "MMM dd, hh:mm:ss a") : ""}
+      </div>
     </div>
   );
 }
