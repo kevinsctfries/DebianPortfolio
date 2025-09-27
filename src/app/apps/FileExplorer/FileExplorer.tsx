@@ -2,7 +2,7 @@
 
 import styles from "./fileExplorer.module.scss";
 import Image from "next/image";
-import linuxFS from "@/app/data/linus-fs.json";
+import linuxFS from "@/app/data/linux-fs.json";
 
 // folder icons
 import folderDocuments from "../../assets/places/folder-documents.svg";
