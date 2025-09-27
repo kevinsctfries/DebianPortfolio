@@ -180,7 +180,7 @@ export default function FileExplorer() {
           <div className={styles.section}>
             <span>Places</span>
             <ul>
-              <li>
+              <li onClick={() => navigateTo(["/"])}>
                 <Image
                   src={computerIcon}
                   alt="Computer"
@@ -189,19 +189,20 @@ export default function FileExplorer() {
                 />
                 Computer
               </li>
-              <li>
+              <li onClick={() => navigateTo(["/", "home", "user"])}>
                 <Image src={homeIcon} alt="Home" width={16} height={16} />
                 kevin
               </li>
-              <li>
+              <li onClick={() => navigateTo(["/", "home", "user", "Desktop"])}>
                 <Image src={desktopIcon} alt="Desktop" width={16} height={16} />
                 Desktop
               </li>
-              <li>
+              <li onClick={() => navigateTo(["/", "home", "user", "Trash"])}>
                 <Image src={trashIcon} alt="Trash" width={16} height={16} />
                 Trash
               </li>
-              <li>
+              <li
+                onClick={() => navigateTo(["/", "home", "user", "Documents"])}>
                 <Image
                   src={documentsIcon}
                   alt="Documents"
@@ -210,11 +211,11 @@ export default function FileExplorer() {
                 />
                 Documents
               </li>
-              <li>
+              <li onClick={() => navigateTo(["/", "home", "user", "Music"])}>
                 <Image src={musicIcon} alt="Music" width={16} height={16} />
                 Music
               </li>
-              <li>
+              <li onClick={() => navigateTo(["/", "home", "user", "Pictures"])}>
                 <Image
                   src={picturesIcon}
                   alt="Pictures"
@@ -223,11 +224,12 @@ export default function FileExplorer() {
                 />
                 Pictures
               </li>
-              <li>
+              <li onClick={() => navigateTo(["/", "home", "user", "Videos"])}>
                 <Image src={videosIcon} alt="Videos" width={16} height={16} />
                 Videos
               </li>
-              <li>
+              <li
+                onClick={() => navigateTo(["/", "home", "user", "Downloads"])}>
                 <Image
                   src={downloadsIcon}
                   alt="Downloads"
@@ -239,7 +241,7 @@ export default function FileExplorer() {
             </ul>
             <span>Devices</span>
             <ul>
-              <li>
+              <li onClick={() => navigateTo(["/"])}>
                 <Image src={fsIcon} alt="File System" width={16} height={16} />
                 File System
               </li>
