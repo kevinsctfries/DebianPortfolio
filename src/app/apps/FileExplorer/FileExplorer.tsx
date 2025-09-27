@@ -18,6 +18,9 @@ import goForward from "../../assets/actions/go-next-symbolic.svg";
 import goUp from "../../assets/actions/go-up-symbolic.svg";
 import goHome from "../../assets/actions/go-home-symbolic.svg";
 import searchIcon from "../../assets/system/edit-find-symbolic.svg";
+import panLeft from "../../assets/actions/pan-start-symbolic.svg";
+import panRight from "../../assets/actions/pan-end-symbolic.svg";
+import editIcon from "../../assets/actions/document-edit-symbolic.svg";
 
 import computerIcon from "../../assets/places/16/video-display.svg";
 import homeIcon from "../../assets/places/16/user-home.svg";
@@ -163,7 +166,40 @@ export default function FileExplorer() {
               className={styles.actionBtn}
             />
           </button>
-          <div className={styles.dirPath}></div>
+          <div className={styles.dirPath}>
+            <Image
+              src={panLeft}
+              alt=""
+              width={16}
+              height={16}
+              className={styles.panLeft}
+            />
+            {path.slice(1).map((dir, idx) => {
+              const subPath = ["/", ...path.slice(1, idx + 1)];
+              const isActive = idx === path.length - 2;
+              return (
+                <div
+                  key={idx}
+                  className={`${styles.pathSegment} ${
+                    isActive ? styles.active : ""
+                  }`}
+                  onClick={() => navigateTo(subPath)}>
+                  {dir}
+                </div>
+              );
+            })}
+            <div className={styles.pathSpacer}>
+              <Image src={editIcon} alt="" width={16} height={16} />
+            </div>
+            <Image
+              src={panRight}
+              alt=""
+              width={16}
+              height={16}
+              className={styles.panRight}
+            />
+          </div>
+
           <button>
             <Image
               src={searchIcon}
