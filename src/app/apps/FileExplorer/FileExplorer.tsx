@@ -2,6 +2,7 @@
 
 import styles from "./fileExplorer.module.scss";
 import Image from "next/image";
+import linuxFS from "@/app/data/linus-fs.json";
 
 // folder icons
 import folderDocuments from "../../assets/places/folder-documents.svg";
@@ -28,52 +29,86 @@ import picturesIcon from "../../assets/places/16/folder-pictures.svg";
 import videosIcon from "../../assets/places/16/folder-videos.svg";
 import downloadsIcon from "../../assets/places/16/folder-download.svg";
 import fsIcon from "../../assets/places/16/drive-harddisk.svg";
+import { useState } from "react";
 
-type FileItem = {
-  name: string;
-  type: "file" | "dir";
-  icon?: string;
-  children?: FileItem[];
+type FileNode = {
+  type: "file" | "directory";
+  description: string;
+  contents?: Record<string, FileNode>;
 };
 
-const mockFiles: FileItem[] = [
-  { name: ".cache", type: "dir", icon: folderIcon },
-  { name: ".config", type: "dir", icon: folderIcon },
-  { name: ".ssh", type: "dir", icon: folderIcon },
-  { name: "Desktop", type: "dir", icon: folderIcon },
-  { name: "Documents", type: "dir", icon: folderDocuments },
-  { name: "Downloads", type: "dir", icon: folderDownloads },
-  { name: "Music", type: "dir", icon: folderMusic },
-  { name: "Pictures", type: "dir", icon: folderPictures },
-  { name: "Public", type: "dir", icon: folderIcon },
-  { name: ".local", type: "dir", icon: folderIcon },
-  { name: "Trash", type: "dir", icon: folderIcon },
-  { name: "Videos", type: "dir", icon: folderVideos },
-  { name: "Text", type: "file" }, // No icon for files yet (placeholder)
-];
-
 export default function FileExplorer() {
-  const renderTree = (items: FileItem[], parent = "") =>
-    items.map(item => {
-      const path = `${parent}/${item.name}`;
+  const [path, setPath] = useState<string[]>(["/"]);
+  const [history, setHistory] = useState<string[][]>([["/"]]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
-      if (item.type === "dir") {
+  const getNodeAtPath = (pathArr: string[], tree: any): FileNode => {
+    let node: FileNode = tree["/"];
+    for (let i = 1; i < pathArr.length; i++) {
+      node = node.contents?.[pathArr[i]] as FileNode;
+    }
+    return node;
+  };
+
+  const navigateTo = (newPath: string[]) => {
+    const updatedHistory = history.slice(0, historyIndex + 1);
+    updatedHistory.push(newPath);
+    setHistory(updatedHistory);
+    setHistoryIndex(updatedHistory.length - 1);
+    setPath(newPath);
+  };
+
+  const currentNode = getNodeAtPath(path, linuxFS);
+  const items = currentNode.contents
+    ? Object.entries(currentNode.contents)
+    : [];
+
+  const enterDir = (dir: string) => {
+    navigateTo([...path, dir]);
+  };
+
+  const goUpDir = () => {
+    if (path.length > 1) {
+      navigateTo(path.slice(0, -1));
+    }
+  };
+
+  const goHomeDir = () => {
+    navigateTo(["/", "home", "user"]);
+  };
+
+  const goBackDir = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setPath(history[newIndex]);
+    }
+  };
+
+  const goForwardDir = () => {
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setPath(history[newIndex]);
+    }
+  };
+
+  const renderDir = () =>
+    items.map(([name, node]) => {
+      if (node.type === "directory") {
         return (
-          <div key={path} className={styles.dir}>
-            <Image
-              src={item.icon || folderIcon}
-              alt={item.name}
-              width={64}
-              height={64}
-            />
-            <div className={styles.dirHeader}>{item.name}</div>
+          <div
+            key={name}
+            className={styles.dir}
+            onDoubleClick={() => enterDir(name)}>
+            <Image src={folderIcon} alt={name} width={64} height={64} />
+            <div className={styles.dirHeader}>{name}</div>
           </div>
         );
       }
-
       return (
-        <div key={path} className={styles.file}>
-          <span>File</span> {item.name}
+        <div key={name} className={styles.file}>
+          <span>File</span> {name}
         </div>
       );
     });
@@ -90,7 +125,7 @@ export default function FileExplorer() {
           <li>Help</li>
         </ul>
         <div className={styles.actions}>
-          <button>
+          <button onClick={goBackDir} disabled={historyIndex === 0}>
             <Image
               src={goBack}
               alt="Back"
@@ -99,7 +134,9 @@ export default function FileExplorer() {
               className={styles.actionBtn}
             />
           </button>
-          <button>
+          <button
+            onClick={goForwardDir}
+            disabled={historyIndex === history.length - 1}>
             <Image
               src={goForward}
               alt="Forward"
@@ -108,7 +145,7 @@ export default function FileExplorer() {
               className={styles.actionBtn}
             />
           </button>
-          <button>
+          <button onClick={goUpDir}>
             <Image
               src={goUp}
               alt="Up"
@@ -117,7 +154,7 @@ export default function FileExplorer() {
               className={styles.actionBtn}
             />
           </button>
-          <button>
+          <button onClick={goHomeDir}>
             <Image
               src={goHome}
               alt="Home"
@@ -210,7 +247,7 @@ export default function FileExplorer() {
           </div>
         </div>
         <div className={styles.main}>
-          <div className={styles.content}>{renderTree(mockFiles)}</div>
+          <div className={styles.content}>{renderDir()}</div>
         </div>
       </div>
     </div>
