@@ -64,6 +64,10 @@
                 "type": "directory",
                 "description": "User desktop files"
               },
+              "Trash": {
+                "type": "directory",
+                "description": "User trash files"
+              },
               "Documents": {
                 "type": "directory",
                 "description": "User documents"
