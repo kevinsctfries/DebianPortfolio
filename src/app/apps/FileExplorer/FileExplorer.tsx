@@ -2,7 +2,7 @@
 
 import styles from "./fileExplorer.module.scss";
 import Image from "next/image";
-import linuxFS from "@/app/data/linux-fs.json";
+import linuxFSJson from "@/app/data/linux-fs.json";
 
 // folder icons
 import folderDocuments from "../../assets/places/folder-documents.svg";
@@ -22,6 +22,12 @@ import panLeft from "../../assets/actions/pan-start-symbolic.svg";
 import panRight from "../../assets/actions/pan-end-symbolic.svg";
 import editIcon from "../../assets/actions/document-edit-symbolic.svg";
 
+// flat icons
+import fsFlat from "../../assets/places/drive-harddisk-flat.svg";
+import computerFlat from "../../assets/places/video-display-flat.svg";
+import folderFlat from "../../assets/places/folder-flat.svg";
+import trashFlat from "../../assets/places/user-trash-flat.svg";
+
 import computerIcon from "../../assets/places/16/video-display.svg";
 import homeIcon from "../../assets/places/16/user-home.svg";
 import desktopIcon from "../../assets/places/16/user-desktop.svg";
@@ -40,20 +46,36 @@ type FileNode = {
   contents?: Record<string, FileNode>;
 };
 
+type FileTree = {
+  [key: string]: FileNode;
+};
+
+const linuxFS = linuxFSJson as Record<string, FileNode>;
+
 export default function FileExplorer() {
   const [path, setPath] = useState<string[]>(["/"]);
   const [history, setHistory] = useState<string[][]>([["/"]]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const getNodeAtPath = (pathArr: string[], tree: any): FileNode => {
-    let node: FileNode = tree["/"];
+  const getNodeAtPath = (
+    pathArr: string[],
+    tree: FileTree
+  ): FileNode | null => {
+    let node: FileNode | undefined = tree["/"];
     for (let i = 1; i < pathArr.length; i++) {
-      node = node.contents?.[pathArr[i]] as FileNode;
+      if (!node?.contents) return null;
+      node = node.contents[pathArr[i]];
+      if (!node) return null;
     }
-    return node;
+    return node ?? null;
   };
 
   const navigateTo = (newPath: string[]) => {
+    const node = getNodeAtPath(newPath, linuxFS);
+    if (!node || node.type !== "directory") {
+      return;
+    }
+
     const updatedHistory = history.slice(0, historyIndex + 1);
     updatedHistory.push(newPath);
     setHistory(updatedHistory);
@@ -62,7 +84,7 @@ export default function FileExplorer() {
   };
 
   const currentNode = getNodeAtPath(path, linuxFS);
-  const items = currentNode.contents
+  const items = currentNode?.contents
     ? Object.entries(currentNode.contents)
     : [];
 
@@ -77,7 +99,7 @@ export default function FileExplorer() {
   };
 
   const goHomeDir = () => {
-    navigateTo(["/", "home", "user"]);
+    navigateTo(["/", "home", "Kevin"]);
   };
 
   const goBackDir = () => {
@@ -96,13 +118,82 @@ export default function FileExplorer() {
     }
   };
 
+  const isActivePath = (targetPath: string[]) => {
+    return JSON.stringify(path) === JSON.stringify(targetPath);
+  };
+
+  const [isEditingPath, setIsEditingPath] = useState(false);
+  const [editPath, setEditPath] = useState(path.join("/"));
+
+  const startEditingPath = () => {
+    setEditPath(pathToString(path));
+    setIsEditingPath(true);
+  };
+
+  const submitEditPath = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleaned = editPath.replace(/\/$/, "");
+    const newPath = cleaned.split("/").filter(Boolean);
+    navigateTo(["/", ...newPath]);
+    setIsEditingPath(false);
+  };
+
+  const folderCount = items.filter(
+    ([_, node]) => node.type === "directory"
+  ).length;
+  const fileCount = items.filter(([_, node]) => node.type === "file").length;
+
+  const getSegmentIcon = (
+    segment: string,
+    index: number,
+    pathArr: string[]
+  ) => {
+    if (index === 0 && segment === "/") {
+      return fsFlat;
+    }
+
+    if (segment === "Kevin" && pathArr[index - 1] === "home") {
+      return goHome;
+    }
+
+    if (segment === "Desktop") {
+      return folderFlat;
+    }
+
+    if (segment === "Trash") {
+      return trashFlat;
+    }
+
+    return null;
+  };
+
+  const isUnderUserDir =
+    path.length >= 3 && path[1] === "home" && path[2] === "Kevin";
+
+  const [showFullPath, setShowFullPath] = useState(false);
+
+  const displaySegments = showFullPath
+    ? path.slice(1)
+    : isUnderUserDir
+    ? path.slice(2)
+    : path.slice(1);
+  const pathToString = (pathArr: string[]): string => {
+    if (pathArr.length === 1 && pathArr[0] === "/") return "/";
+    return "/" + pathArr.slice(1).join("/") + "/";
+  };
+
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
   const renderDir = () =>
     items.map(([name, node]) => {
+      const isSelected = selectedItem === name;
+
       if (node.type === "directory") {
         return (
           <div
             key={name}
-            className={styles.dir}
+            className={`${styles.dir} ${isSelected ? styles.selected : ""}`}
+            onClick={() => setSelectedItem(name)}
             onDoubleClick={() => enterDir(name)}>
             <Image src={folderIcon} alt={name} width={64} height={64} />
             <div className={styles.dirHeader}>{name}</div>
@@ -110,7 +201,10 @@ export default function FileExplorer() {
         );
       }
       return (
-        <div key={name} className={styles.file}>
+        <div
+          key={name}
+          className={`${styles.file} ${isSelected ? styles.selected : ""}`}
+          onClick={() => setSelectedItem(name)}>
           <span>File</span> {name}
         </div>
       );
@@ -128,7 +222,10 @@ export default function FileExplorer() {
           <li>Help</li>
         </ul>
         <div className={styles.actions}>
-          <button onClick={goBackDir} disabled={historyIndex === 0}>
+          <button
+            aria-label="Go Back"
+            onClick={goBackDir}
+            disabled={historyIndex === 0}>
             <Image
               src={goBack}
               alt="Back"
@@ -138,6 +235,7 @@ export default function FileExplorer() {
             />
           </button>
           <button
+            aria-label="Go Forward"
             onClick={goForwardDir}
             disabled={historyIndex === history.length - 1}>
             <Image
@@ -148,7 +246,7 @@ export default function FileExplorer() {
               className={styles.actionBtn}
             />
           </button>
-          <button onClick={goUpDir}>
+          <button aria-label="Up Directory" onClick={goUpDir}>
             <Image
               src={goUp}
               alt="Up"
@@ -157,7 +255,7 @@ export default function FileExplorer() {
               className={styles.actionBtn}
             />
           </button>
-          <button onClick={goHomeDir}>
+          <button aria-label="Home" onClick={goHomeDir}>
             <Image
               src={goHome}
               alt="Home"
@@ -167,40 +265,95 @@ export default function FileExplorer() {
             />
           </button>
           <div className={styles.dirPath}>
-            <Image
-              src={panLeft}
-              alt=""
-              width={16}
-              height={16}
-              className={styles.panLeft}
-            />
-            {path.slice(1).map((dir, idx) => {
-              const subPath = ["/", ...path.slice(1, idx + 1)];
-              const isActive = idx === path.length - 2;
-              return (
-                <div
-                  key={idx}
-                  className={`${styles.pathSegment} ${
-                    isActive ? styles.active : ""
-                  }`}
-                  onClick={() => navigateTo(subPath)}>
-                  {dir}
+            {isEditingPath ? (
+              <form onSubmit={submitEditPath}>
+                <input
+                  type="text"
+                  value={editPath}
+                  onChange={e => setEditPath(e.target.value)}
+                  onBlur={() => setIsEditingPath(false)}
+                  autoFocus
+                  className={styles.pathInput}
+                  aria-label="Directory Path"
+                />
+              </form>
+            ) : (
+              <>
+                <Image
+                  src={panLeft}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className={styles.panLeft}
+                  onClick={() => setShowFullPath(true)}
+                />
+                {!isUnderUserDir && (
+                  <div
+                    className={`${styles.pathSegment} ${
+                      path.length === 1 ? styles.active : ""
+                    }`}
+                    onClick={() => navigateTo(["/"])}>
+                    <Image
+                      src={fsFlat}
+                      alt="File System"
+                      width={16}
+                      height={16}
+                      className={styles.pathIcon}
+                    />
+                  </div>
+                )}
+
+                {displaySegments.map((dir, idx) => {
+                  let realIdx: number;
+
+                  if (showFullPath) {
+                    realIdx = idx + 1;
+                  } else if (isUnderUserDir) {
+                    realIdx = idx + 2;
+                  } else {
+                    realIdx = idx + 1;
+                  }
+
+                  const subPath = path.slice(0, realIdx + 1);
+
+                  const isActive = idx === displaySegments.length - 1;
+                  const icon = getSegmentIcon(dir, realIdx, path);
+
+                  return (
+                    <div
+                      key={idx}
+                      className={`${styles.pathSegment} ${
+                        isActive ? styles.active : ""
+                      }`}
+                      onClick={() => navigateTo(subPath)}>
+                      {icon && (
+                        <Image
+                          src={icon}
+                          alt=""
+                          width={16}
+                          height={16}
+                          className={styles.pathIcon}
+                        />
+                      )}
+                      {dir}
+                    </div>
+                  );
+                })}
+                <div className={styles.pathSpacer} onClick={startEditingPath}>
+                  <Image src={editIcon} alt="" width={16} height={16} />
                 </div>
-              );
-            })}
-            <div className={styles.pathSpacer}>
-              <Image src={editIcon} alt="" width={16} height={16} />
-            </div>
-            <Image
-              src={panRight}
-              alt=""
-              width={16}
-              height={16}
-              className={styles.panRight}
-            />
+                <Image
+                  src={panRight}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className={styles.panRight}
+                />
+              </>
+            )}
           </div>
 
-          <button>
+          <button aria-label="Search">
             <Image
               src={searchIcon}
               alt="Search"
@@ -216,7 +369,9 @@ export default function FileExplorer() {
           <div className={styles.section}>
             <span>Places</span>
             <ul>
-              <li onClick={() => navigateTo(["/"])}>
+              <li
+                className={isActivePath(["/"]) ? styles.active : ""}
+                onClick={() => navigateTo(["/"])}>
                 <Image
                   src={computerIcon}
                   alt="Computer"
@@ -225,20 +380,45 @@ export default function FileExplorer() {
                 />
                 Computer
               </li>
-              <li onClick={() => navigateTo(["/", "home", "user"])}>
+
+              <li
+                className={
+                  isActivePath(["/", "home", "Kevin"]) ? styles.active : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin"])}>
                 <Image src={homeIcon} alt="Home" width={16} height={16} />
                 kevin
               </li>
-              <li onClick={() => navigateTo(["/", "home", "user", "Desktop"])}>
+
+              <li
+                className={
+                  isActivePath(["/", "home", "Kevin", "Desktop"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Desktop"])}>
                 <Image src={desktopIcon} alt="Desktop" width={16} height={16} />
                 Desktop
               </li>
-              <li onClick={() => navigateTo(["/", "home", "user", "Trash"])}>
+
+              <li
+                className={
+                  isActivePath(["/", "home", "Kevin", "Trash"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Trash"])}>
                 <Image src={trashIcon} alt="Trash" width={16} height={16} />
                 Trash
               </li>
+
               <li
-                onClick={() => navigateTo(["/", "home", "user", "Documents"])}>
+                className={
+                  isActivePath(["/", "home", "Kevin", "Documents"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Documents"])}>
                 <Image
                   src={documentsIcon}
                   alt="Documents"
@@ -247,11 +427,25 @@ export default function FileExplorer() {
                 />
                 Documents
               </li>
-              <li onClick={() => navigateTo(["/", "home", "user", "Music"])}>
+
+              <li
+                className={
+                  isActivePath(["/", "home", "Kevin", "Music"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Music"])}>
                 <Image src={musicIcon} alt="Music" width={16} height={16} />
                 Music
               </li>
-              <li onClick={() => navigateTo(["/", "home", "user", "Pictures"])}>
+
+              <li
+                className={
+                  isActivePath(["/", "home", "Kevin", "Pictures"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Pictures"])}>
                 <Image
                   src={picturesIcon}
                   alt="Pictures"
@@ -260,12 +454,25 @@ export default function FileExplorer() {
                 />
                 Pictures
               </li>
-              <li onClick={() => navigateTo(["/", "home", "user", "Videos"])}>
+
+              <li
+                className={
+                  isActivePath(["/", "home", "Kevin", "Videos"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Videos"])}>
                 <Image src={videosIcon} alt="Videos" width={16} height={16} />
                 Videos
               </li>
+
               <li
-                onClick={() => navigateTo(["/", "home", "user", "Downloads"])}>
+                className={
+                  isActivePath(["/", "home", "Kevin", "Downloads"])
+                    ? styles.active
+                    : ""
+                }
+                onClick={() => navigateTo(["/", "home", "Kevin", "Downloads"])}>
                 <Image
                   src={downloadsIcon}
                   alt="Downloads"
@@ -275,9 +482,13 @@ export default function FileExplorer() {
                 Downloads
               </li>
             </ul>
+
             <span>Devices</span>
+
             <ul>
-              <li onClick={() => navigateTo(["/"])}>
+              <li
+                className={isActivePath(["/"]) ? styles.active : ""}
+                onClick={() => navigateTo(["/"])}>
                 <Image src={fsIcon} alt="File System" width={16} height={16} />
                 File System
               </li>
@@ -286,6 +497,12 @@ export default function FileExplorer() {
         </div>
         <div className={styles.main}>
           <div className={styles.content}>{renderDir()}</div>
+          <div className={styles.contentInfo}>
+            <span>
+              {folderCount} folder{folderCount !== 1 ? "s" : ""} | {fileCount}{" "}
+              file{fileCount !== 1 ? "s" : ""}
+            </span>
+          </div>
         </div>
       </div>
     </div>

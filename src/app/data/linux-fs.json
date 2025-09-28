@@ -52,9 +52,9 @@
         "type": "directory",
         "description": "User home directories",
         "contents": {
-          "user": {
+          "Kevin": {
             "type": "directory",
-            "description": "Home directory for user",
+            "description": "Home directory for Kevin",
             "contents": {
               ".bashrc": {
                 "type": "file",
@@ -129,7 +129,7 @@
       },
       "root": {
         "type": "directory",
-        "description": "Root user home directory",
+        "description": "Root Kevin home directory",
         "contents": {}
       },
       "run": {
