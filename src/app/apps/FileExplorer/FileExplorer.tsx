@@ -38,6 +38,7 @@ import picturesIcon from "../../assets/places/16/folder-pictures.svg";
 import videosIcon from "../../assets/places/16/folder-videos.svg";
 import downloadsIcon from "../../assets/places/16/folder-download.svg";
 import fsIcon from "../../assets/places/16/drive-harddisk.svg";
+import fsDirIcon from "../../assets/system/drive-harddisk.svg";
 import { useState } from "react";
 
 type FileNode = {
@@ -227,17 +228,24 @@ export default function FileExplorer() {
       const isSelected = selectedItem === name;
 
       if (node.type === "directory") {
+        let icon = folderIcon;
+
+        if (node.link === "/") {
+          icon = fsDirIcon;
+        }
+
         return (
           <div
             key={name}
             className={`${styles.dir} ${isSelected ? styles.selected : ""}`}
             onClick={() => setSelectedItem(name)}
             onDoubleClick={() => enterDir(name)}>
-            <Image src={folderIcon} alt={name} width={64} height={64} />
+            <Image src={icon} alt={name} width={64} height={64} />
             <div className={styles.dirHeader}>{name}</div>
           </div>
         );
       }
+
       return (
         <div
           key={name}
