@@ -48,7 +48,7 @@ export default function Desktop() {
         <DesktopIcon
           key={app.id}
           name={app.name}
-          icon={app.icon}
+          icon={app.icon.src}
           x={iconPositions[app.id].x}
           y={iconPositions[app.id].y}
           onDragStop={(x, y) => handleDrag(app.id, x, y)}
