@@ -153,7 +153,7 @@ export default function Menu({ onClose }: MenuProps) {
           <span className={styles.userName}>Kevin</span>
         </div>
         <div className={styles.commands}>
-          <button className={styles.commandButton}>
+          <button aria-label="Settings" className={styles.commandButton}>
             <Image
               src={settingsApp}
               alt="Settings Manager"
@@ -162,7 +162,7 @@ export default function Menu({ onClose }: MenuProps) {
               className={styles.categoryIcon}
             />
           </button>
-          <button className={styles.commandButton}>
+          <button aria-label="Lock Screen" className={styles.commandButton}>
             <Image
               src={lockscreenIcon}
               alt="Lock Screen"
@@ -171,7 +171,7 @@ export default function Menu({ onClose }: MenuProps) {
               className={styles.categoryIcon}
             />
           </button>
-          <button className={styles.commandButton}>
+          <button aria-label="Log Out" className={styles.commandButton}>
             <Image
               src={logoutIcon}
               alt="Log Out..."
@@ -246,6 +246,7 @@ export default function Menu({ onClose }: MenuProps) {
           type="text"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
+          aria-label="Search"
         />
       </div>
     </div>

@@ -42,6 +42,7 @@ export default function Panel() {
   return (
     <div className={styles.panel}>
       <button
+        aria-label="Menu"
         className={`${styles.menuButton} ${menuOpen ? styles.active : ""}`}
         onClick={() => {
           setMenuOpen(!menuOpen);
