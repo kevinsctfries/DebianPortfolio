@@ -44,6 +44,7 @@ type FileNode = {
   type: "file" | "directory";
   description: string;
   contents?: Record<string, FileNode>;
+  link?: string;
 };
 
 type FileTree = {
@@ -61,12 +62,29 @@ export default function FileExplorer() {
     pathArr: string[],
     tree: FileTree
   ): FileNode | null => {
-    let node: FileNode | undefined = tree["/"];
-    for (let i = 1; i < pathArr.length; i++) {
-      if (!node?.contents) return null;
-      node = node.contents[pathArr[i]];
+    if (!pathArr || pathArr.length === 0) return null;
+
+    let node: FileNode | undefined;
+
+    const root = pathArr[0];
+    if (root.endsWith(":///")) {
+      node = tree[root];
       if (!node) return null;
+      for (let i = 1; i < pathArr.length; i++) {
+        if (!node.contents) return null;
+        node = node.contents[pathArr[i]];
+        if (!node) return null;
+      }
+    } else {
+      node = tree["/"];
+      if (!node) return null;
+      for (let i = 1; i < pathArr.length; i++) {
+        if (!node.contents) return null;
+        node = node.contents[pathArr[i]];
+        if (!node) return null;
+      }
     }
+
     return node ?? null;
   };
 
@@ -89,7 +107,18 @@ export default function FileExplorer() {
     : [];
 
   const enterDir = (dir: string) => {
-    navigateTo([...path, dir]);
+    const node = currentNode?.contents?.[dir];
+    if (!node) return;
+
+    if (node.link) {
+      navigateTo(
+        node.link.split("/").filter(Boolean).length
+          ? node.link.split("/")
+          : ["/"]
+      );
+    } else {
+      navigateTo([...path, dir]);
+    }
   };
 
   const goUpDir = () => {
@@ -160,7 +189,11 @@ export default function FileExplorer() {
       return folderFlat;
     }
 
-    if (segment === "Trash") {
+    if (segment === "computer:///") {
+      return computerFlat;
+    }
+
+    if (segment === "trash:///") {
       return trashFlat;
     }
 
@@ -172,13 +205,18 @@ export default function FileExplorer() {
 
   const [showFullPath, setShowFullPath] = useState(false);
 
-  const displaySegments = showFullPath
-    ? path.slice(1)
-    : isUnderUserDir
-    ? path.slice(2)
-    : path.slice(1);
+  const displaySegments = (() => {
+    if (path[0].endsWith(":///")) return path;
+    if (showFullPath) return path.slice(1);
+    if (isUnderUserDir) return path.slice(2);
+    return path.slice(1);
+  })();
+
   const pathToString = (pathArr: string[]): string => {
-    if (pathArr.length === 1 && pathArr[0] === "/") return "/";
+    if (pathArr.length === 1) return pathArr[0];
+    if (pathArr[0].endsWith(":///")) {
+      return pathArr.join("/") + "/";
+    }
     return "/" + pathArr.slice(1).join("/") + "/";
   };
 
@@ -287,7 +325,7 @@ export default function FileExplorer() {
                   className={styles.panLeft}
                   onClick={() => setShowFullPath(true)}
                 />
-                {!isUnderUserDir && (
+                {path[0] === "/" && (
                   <div
                     className={`${styles.pathSegment} ${
                       path.length === 1 ? styles.active : ""
@@ -370,8 +408,8 @@ export default function FileExplorer() {
             <span>Places</span>
             <ul>
               <li
-                className={isActivePath(["/"]) ? styles.active : ""}
-                onClick={() => navigateTo(["/"])}>
+                className={isActivePath(["computer:///"]) ? styles.active : ""}
+                onClick={() => navigateTo(["computer:///"])}>
                 <Image
                   src={computerIcon}
                   alt="Computer"
@@ -402,12 +440,8 @@ export default function FileExplorer() {
               </li>
 
               <li
-                className={
-                  isActivePath(["/", "home", "Kevin", "Trash"])
-                    ? styles.active
-                    : ""
-                }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Trash"])}>
+                className={isActivePath(["trash:///"]) ? styles.active : ""}
+                onClick={() => navigateTo(["trash:///"])}>
                 <Image src={trashIcon} alt="Trash" width={16} height={16} />
                 Trash
               </li>

@@ -1,4 +1,21 @@
 {
+  "computer:///": {
+    "type": "directory",
+    "description": "Virtual computer root",
+    "contents": {
+      "File System": {
+        "type": "directory",
+        "description": "Main disk",
+        "link": "/"
+      }
+    }
+  },
+
+  "trash:///": {
+    "type": "directory",
+    "description": "User trash files"
+  },
+
   "/": {
     "type": "directory",
     "description": "Root directory",
@@ -63,10 +80,6 @@
               "Desktop": {
                 "type": "directory",
                 "description": "User desktop files"
-              },
-              "Trash": {
-                "type": "directory",
-                "description": "User trash files"
               },
               "Documents": {
                 "type": "directory",
