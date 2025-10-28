@@ -1,13 +1,19 @@
-// layout.tsx
 import type { Metadata } from "next";
 import "./globals.scss";
 
 import { Ubuntu } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-sans",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${ubuntu.variable}`}>
+    <html lang="en" className={`${ubuntu.variable} ${jetbrains.variable}`}>
       <body>{children}</body>
     </html>
   );
