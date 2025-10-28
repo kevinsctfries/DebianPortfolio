@@ -227,6 +227,11 @@ export default function FileExplorer() {
     items.map(([name, node]) => {
       const isSelected = selectedItem === name;
 
+      const handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setSelectedItem(name);
+      };
+
       if (node.type === "directory") {
         let icon = folderIcon;
 
@@ -238,7 +243,7 @@ export default function FileExplorer() {
           <div
             key={name}
             className={`${styles.dir} ${isSelected ? styles.selected : ""}`}
-            onClick={() => setSelectedItem(name)}
+            onClick={handleClick}
             onDoubleClick={() => enterDir(name)}>
             <Image src={icon} alt={name} width={64} height={64} />
             <div className={styles.dirHeader}>{name}</div>
@@ -250,7 +255,7 @@ export default function FileExplorer() {
         <div
           key={name}
           className={`${styles.file} ${isSelected ? styles.selected : ""}`}
-          onClick={() => setSelectedItem(name)}>
+          onClick={handleClick}>
           <span>File</span> {name}
         </div>
       );
@@ -537,7 +542,7 @@ export default function FileExplorer() {
             </ul>
           </div>
         </div>
-        <div className={styles.main}>
+        <div className={styles.main} onClick={() => setSelectedItem(null)}>
           <div className={styles.content}>{renderDir()}</div>
           <div className={styles.contentInfo}>
             <span>

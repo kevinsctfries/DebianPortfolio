@@ -6,6 +6,7 @@
     background: var(--theme-bg-color);
     font-size: 12px;
     overflow: hidden;
+    -webkit-user-select: none;
     user-select: none;
 
     .toolbar {
