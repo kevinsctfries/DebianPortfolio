@@ -3,12 +3,13 @@
 import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
+import type { FitAddon } from "@xterm/addon-fit";
 import styles from "./terminal.module.scss";
 
 export default function TerminalComponent() {
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const xtermRef = useRef<Terminal | null>(null);
-  const fitAddonRef = useRef<any>(null);
+  const fitAddonRef = useRef<FitAddon | null>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
   const handleResizeRef = useRef<() => void>(() => {});
 
