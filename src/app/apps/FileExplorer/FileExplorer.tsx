@@ -41,7 +41,7 @@ import fsIcon from "../../assets/places/16/drive-harddisk.svg";
 import fsDirIcon from "../../assets/system/drive-harddisk.svg";
 import { useState } from "react";
 
-type FileNode = {
+export type FileNode = {
   type: "file" | "directory";
   description: string;
   contents?: Record<string, FileNode>;
@@ -52,10 +52,18 @@ type FileTree = {
   [key: string]: FileNode;
 };
 
+type FileExplorerProps = {
+  startNode?: FileNode;
+  startPath?: string[];
+};
+
 const linuxFS = linuxFSJson as Record<string, FileNode>;
 
-export default function FileExplorer() {
-  const [path, setPath] = useState<string[]>(["/"]);
+export default function FileExplorer({
+  startNode,
+  startPath,
+}: FileExplorerProps) {
+  const [path, setPath] = useState<string[]>(startPath ?? ["/"]);
   const [history, setHistory] = useState<string[][]>([["/"]]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
@@ -102,7 +110,7 @@ export default function FileExplorer() {
     setPath(newPath);
   };
 
-  const currentNode = getNodeAtPath(path, linuxFS);
+  const currentNode = startNode ?? getNodeAtPath(path, linuxFS);
   const items = currentNode?.contents
     ? Object.entries(currentNode.contents)
     : [];

@@ -79,7 +79,14 @@
               },
               "Desktop": {
                 "type": "directory",
-                "description": "User desktop files"
+                "description": "User desktop files",
+                "contents": {
+                  "Projects": {
+                    "type": "directory",
+                    "description": "My GitHub Projects",
+                    "contents": {}
+                  }
+                }
               },
               "Documents": {
                 "type": "directory",

@@ -9,8 +9,10 @@ import aboutIcon from "../../assets/apps/dialog-information.svg";
 import folderIcon from "../../assets/system/system-file-manager.svg";
 
 import type { StaticImageData } from "next/image";
+import type { ComponentType } from "react";
 
 export type AppName = "about" | "terminal" | "minesweeper" | "thunar";
+export type DesktopAppProps = Record<string, unknown>;
 
 export type DesktopApp = {
   id: AppName;
@@ -18,7 +20,7 @@ export type DesktopApp = {
   icon: StaticImageData;
   desc?: string;
   category?: string;
-  component: React.ReactNode;
+  component: ComponentType<DesktopAppProps>;
 };
 
 export const desktopApps: DesktopApp[] = [
@@ -26,24 +28,24 @@ export const desktopApps: DesktopApp[] = [
     id: "about",
     name: "About",
     icon: aboutIcon,
-    component: <About />,
+    component: About,
   },
   {
     id: "terminal",
     name: "Terminal",
     icon: terminalIcon,
-    component: <Terminal />,
+    component: Terminal,
   },
   {
     id: "minesweeper",
     name: "Minesweeper",
     icon: minesweeperIcon,
-    component: <Minesweeper />,
+    component: Minesweeper,
   },
   {
     id: "thunar",
     name: "Thunar",
     icon: folderIcon,
-    component: <FileExplorer />,
+    component: FileExplorer,
   },
 ];

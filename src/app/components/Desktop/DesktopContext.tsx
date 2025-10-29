@@ -5,11 +5,12 @@ import { AppName } from "./appData";
 
 type DesktopContextType = {
   openApps: AppName[];
-  openApp: (app: AppName) => void;
+  openApp: (app: AppName, props?: Record<string, unknown>) => void;
   closeApp: (app: AppName) => void;
   bringToFront: (app: AppName) => void;
   getZIndex: (app: AppName) => number;
   activeApp: AppName | null;
+  appProps: Partial<Record<AppName, Record<string, unknown>>>;
 };
 
 export const GRID_SIZE = 80;
@@ -23,6 +24,9 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
     {}
   );
   const [topZ, setTopZ] = useState(1);
+  const [appProps, setAppProps] = useState<
+    Partial<Record<AppName, Record<string, unknown>>>
+  >({});
 
   const activeApp =
     openApps.length > 0
@@ -33,9 +37,13 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
         )
       : null;
 
-  function openApp(app: AppName) {
+  function openApp(app: AppName, props: Record<string, unknown> = {}) {
+    setAppProps(prev => ({ ...prev, [app]: props }));
+
     if (!openApps.includes(app)) {
-      setOpenApps([...openApps, app]);
+      setOpenApps(prev => [...prev, app]);
+      bringToFront(app);
+    } else {
       bringToFront(app);
     }
   }
@@ -43,6 +51,11 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
   function closeApp(app: AppName) {
     setOpenApps(openApps.filter(a => a !== app));
     setZIndexes(prev => {
+      const copy = { ...prev };
+      delete copy[app];
+      return copy;
+    });
+    setAppProps(prev => {
       const copy = { ...prev };
       delete copy[app];
       return copy;
@@ -68,6 +81,7 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
         bringToFront,
         getZIndex,
         activeApp,
+        appProps,
       }}>
       {children}
     </DesktopContext.Provider>

@@ -4,11 +4,27 @@ import styles from "./desktop.module.scss";
 import { GRID_SIZE, useDesktop } from "./DesktopContext";
 import Window from "./Window";
 import DesktopIcon from "./DesktopIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { desktopApps } from "./appData";
+import { populateProjects } from "@/app/utils/github";
+import linuxFSJSon from "@/app/data/linux-fs.json";
+import type { FileNode } from "@/app/apps/FileExplorer/FileExplorer";
+import folderIcon from "../../assets/places/folder.svg";
+
+type DesktopFolder = {
+  id: string;
+  name: string;
+  icon: string;
+  contents: FileNode;
+  path?: string[];
+};
+
+const linuxFS = linuxFSJSon as Record<string, FileNode>;
 
 export default function Desktop() {
-  const { openApps, openApp, closeApp, bringToFront, getZIndex } = useDesktop();
+  const { openApps, openApp, closeApp, bringToFront, getZIndex, appProps } =
+    useDesktop();
+  const [desktopFolders, setDesktopFolders] = useState<DesktopFolder[]>([]);
 
   const [iconPositions, setIconPositions] = useState<
     Record<string, { x: number; y: number }>
@@ -23,6 +39,52 @@ export default function Desktop() {
       return acc;
     }, {} as Record<string, { x: number; y: number }>)
   );
+
+  const [, setRefresh] = useState(false);
+
+  useEffect(() => {
+    const selectedRepos = [{ owner: "kevinsctfries", repo: "DebianPortfolio" }];
+
+    populateProjects(selectedRepos, linuxFS).then(() => {
+      setRefresh(prev => !prev);
+    });
+  }, []);
+
+  function findPathToNode(
+    tree: Record<string, FileNode>,
+    targetNode: FileNode,
+    currentPath: string[] = []
+  ): string[] | null {
+    for (const [name, node] of Object.entries(tree)) {
+      const newPath = [...currentPath, name];
+      if (node === targetNode) return newPath;
+
+      if (node.contents) {
+        const found = findPathToNode(node.contents, targetNode, newPath);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  useEffect(() => {
+    const projectsNode =
+      linuxFS["/"].contents?.home.contents?.Kevin.contents?.Desktop.contents
+        ?.Projects;
+
+    if (projectsNode) {
+      const pathToProjects = findPathToNode(linuxFS, projectsNode);
+      setDesktopFolders([
+        {
+          id: "projects",
+          name: "Projects",
+          icon: folderIcon,
+          contents: projectsNode,
+          path: pathToProjects ?? ["/"],
+        },
+      ]);
+    }
+  }, []);
 
   const handleDrag = (id: string, x: number, y: number) => {
     setIconPositions(prev => {
@@ -56,9 +118,24 @@ export default function Desktop() {
         />
       ))}
 
+      {desktopFolders.map(folder => (
+        <DesktopIcon
+          key={folder.id}
+          name={folder.name}
+          icon={folder.icon}
+          x={iconPositions[folder.id]?.x ?? 0}
+          y={iconPositions[folder.id]?.y ?? 0}
+          onDragStop={(x, y) => handleDrag(folder.id, x, y)}
+          onClick={() => openApp("thunar", { startPath: folder.path })}
+        />
+      ))}
+
       {openApps.map(appId => {
         const app = desktopApps.find(a => a.id === appId);
         if (!app) return null;
+
+        const props = appProps[appId] || {};
+        const AppComponent = app.component;
 
         return (
           <Window
@@ -70,7 +147,7 @@ export default function Desktop() {
             height={appId === "minesweeper" ? 435 : undefined}
             zIndex={getZIndex(appId)}
             onFocus={() => bringToFront(appId)}>
-            {app.component}
+            <AppComponent {...props} />
           </Window>
         );
       })}
