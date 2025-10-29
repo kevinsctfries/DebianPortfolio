@@ -1,10 +1,10 @@
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function GET(
-  _req: NextRequest,
-  context: { params: { owner: string; repo: string } }
+  req: NextRequest,
+  context: { params: Promise<{ owner: string; repo: string }> }
 ) {
-  const { owner, repo } = context.params;
+  const { owner, repo } = await context.params;
   const branch = "main";
 
   try {
@@ -18,7 +18,10 @@ export async function GET(
     }
 
     const data = await res.json();
-    return new Response(JSON.stringify(data), { status: 200 });
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
     console.error(err);
     return new Response("Internal Server Error", { status: 500 });
