@@ -24,32 +24,42 @@ const linuxFS = linuxFSJSon as Record<string, FileNode>;
 export default function Desktop() {
   const { openApps, openApp, closeApp, bringToFront, getZIndex, appProps } =
     useDesktop();
+
   const [desktopFolders, setDesktopFolders] = useState<DesktopFolder[]>([]);
-
-  const [iconPositions, setIconPositions] = useState<
-    Record<string, { x: number; y: number }>
-  >(() =>
-    desktopApps.reduce((acc, app, idx) => {
-      const rawX = 20;
-      const rawY = 20 + idx * GRID_SIZE;
-      acc[app.id] = {
-        x: Math.round(rawX / GRID_SIZE) * GRID_SIZE,
-        y: Math.round(rawY / GRID_SIZE) * GRID_SIZE,
-      };
-      return acc;
-    }, {} as Record<string, { x: number; y: number }>)
-  );
-
   const [, setRefresh] = useState(false);
 
+  // snap positions to the grid
+  const snapToGrid = (value: number) =>
+    Math.round(value / GRID_SIZE) * GRID_SIZE;
+
+  // start icons in a neat little column
+  const getInitialPosition = (index: number) => ({
+    x: 0,
+    y: index * GRID_SIZE,
+  });
+
+  // keep track of where each icon lives
+  const [iconPositions, setIconPositions] = useState<
+    Record<string, { x: number; y: number }>
+  >(() => {
+    const positions: Record<string, { x: number; y: number }> = {};
+
+    desktopApps.forEach((app, idx) => {
+      positions[app.id] = getInitialPosition(idx);
+    });
+
+    return positions;
+  });
+
+  // grab my github projects when the page loads
   useEffect(() => {
     const selectedRepos = [{ owner: "kevinsctfries", repo: "DebianPortfolio" }];
-
-    populateProjects(selectedRepos, linuxFS).then(() => {
-      setRefresh(prev => !prev);
-    });
+    populateProjects(selectedRepos, linuxFS).then(() =>
+      setRefresh(prev => !prev)
+    );
   }, []);
 
+  // walk the fake filesystem to find a folder's full path
   function findPathToNode(
     tree: Record<string, FileNode>,
     targetNode: FileNode,
@@ -58,7 +68,6 @@ export default function Desktop() {
     for (const [name, node] of Object.entries(tree)) {
       const newPath = [...currentPath, name];
       if (node === targetNode) return newPath;
-
       if (node.contents) {
         const found = findPathToNode(node.contents, targetNode, newPath);
         if (found) return found;
@@ -67,6 +76,7 @@ export default function Desktop() {
     return null;
   }
 
+  // drop the Projects folder on the desktop once we find it
   useEffect(() => {
     const projectsNode =
       linuxFS["/"].contents?.home.contents?.Kevin.contents?.Desktop.contents
@@ -74,22 +84,39 @@ export default function Desktop() {
 
     if (projectsNode) {
       const pathToProjects = findPathToNode(linuxFS, projectsNode);
-      setDesktopFolders([
-        {
-          id: "projects",
-          name: "Projects",
-          icon: folderIcon,
-          contents: projectsNode,
-          path: pathToProjects ?? ["/"],
-        },
-      ]);
+      const folder: DesktopFolder = {
+        id: "projects",
+        name: "Projects",
+        icon: folderIcon,
+        contents: projectsNode,
+        path: pathToProjects ?? ["/"],
+      };
+      setDesktopFolders([folder]);
     }
   }, []);
 
+  // give folders a spot once they show up
+  useEffect(() => {
+    setIconPositions(prev => {
+      const next = { ...prev };
+      desktopFolders.forEach((folder, idx) => {
+        if (!next[folder.id]) {
+          next[folder.id] = getInitialPosition(desktopApps.length + idx);
+        }
+      });
+      return next;
+    });
+  }, [desktopFolders]);
+
+  // handle dragging icons around – swap if you drop on another
   const handleDrag = (id: string, x: number, y: number) => {
+    const snappedX = snapToGrid(x);
+    const snappedY = snapToGrid(y);
+
     setIconPositions(prev => {
       const otherId = Object.keys(prev).find(
-        key => key !== id && prev[key].x === x && prev[key].y === y
+        key =>
+          key !== id && prev[key].x === snappedX && prev[key].y === snappedY
       );
 
       if (otherId) {
@@ -100,25 +127,27 @@ export default function Desktop() {
         };
       }
 
-      return { ...prev, [id]: { x, y } };
+      return { ...prev, [id]: { x: snappedX, y: snappedY } };
     });
   };
 
   return (
     <div className={styles.desktop}>
-      {desktopApps.map(app => (
+      {/* app icons */}
+      {desktopApps.map((app, idx) => (
         <DesktopIcon
           key={app.id}
           name={app.name}
           icon={app.icon.src}
-          x={iconPositions[app.id].x}
-          y={iconPositions[app.id].y}
+          x={iconPositions[app.id]?.x ?? 0}
+          y={iconPositions[app.id]?.y ?? 0}
           onDragStop={(x, y) => handleDrag(app.id, x, y)}
           onClick={() => openApp(app.id)}
         />
       ))}
 
-      {desktopFolders.map(folder => (
+      {/* folder icons */}
+      {desktopFolders.map((folder, idx) => (
         <DesktopIcon
           key={folder.id}
           name={folder.name}
@@ -130,6 +159,7 @@ export default function Desktop() {
         />
       ))}
 
+      {/* open windows */}
       {openApps.map(appId => {
         const app = desktopApps.find(a => a.id === appId);
         if (!app) return null;

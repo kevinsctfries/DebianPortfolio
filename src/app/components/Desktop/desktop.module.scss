@@ -10,8 +10,8 @@
         align-items: center;
         width: 80px;
         cursor: default;
+        -webkit-user-select: none;
         user-select: none;
-        transform: translate(1.25rem, 1.25rem);
 
         .icon {
             pointer-events: none;
