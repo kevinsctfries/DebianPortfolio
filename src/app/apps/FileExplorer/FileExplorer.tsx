@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./fileExplorer.module.scss";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import linuxFSJson from "@/app/data/linux-fs.json";
 
 // folder icons
@@ -11,6 +11,15 @@ import folderMusic from "../../assets/places/folder-music.svg";
 import folderPictures from "../../assets/places/folder-pictures.svg";
 import folderVideos from "../../assets/places/folder-videos.svg";
 import folderIcon from "../../assets/places/folder.svg";
+
+// file icons
+import reactIcon from "../../assets/files/react.svg";
+import reactTsIcon from "../../assets/files/react_ts.svg";
+import jsonIcon from "../../assets/files/json.svg";
+import tsIcon from "../../assets/files/typescript.svg";
+import cssIcon from "../../assets/files/css.svg";
+import scssIcon from "../../assets/files/sass.svg";
+import fileIcon from "../../assets/files/file.svg";
 
 // action icons
 import goBack from "../../assets/actions/go-previous-symbolic.svg";
@@ -55,6 +64,16 @@ type FileTree = {
 type FileExplorerProps = {
   startNode?: FileNode;
   startPath?: string[];
+};
+
+const fileIcons: Record<string, StaticImageData> = {
+  tsx: reactTsIcon,
+  jsx: reactIcon,
+  json: jsonIcon,
+  png: picturesIcon,
+  ts: tsIcon,
+  css: cssIcon,
+  scss: scssIcon,
 };
 
 const linuxFS = linuxFSJson as Record<string, FileNode>;
@@ -240,6 +259,14 @@ export default function FileExplorer({
         setSelectedItem(name);
       };
 
+      let icon: StaticImageData;
+      if (node.type === "directory") {
+        icon = node.link === "/" ? fsDirIcon : folderIcon;
+      } else {
+        const ext = name.split(".").pop()?.toLowerCase();
+        icon = ext && fileIcons[ext] ? fileIcons[ext] : fileIcon;
+      }
+
       if (node.type === "directory") {
         let icon = folderIcon;
 
@@ -264,7 +291,8 @@ export default function FileExplorer({
           key={name}
           className={`${styles.file} ${isSelected ? styles.selected : ""}`}
           onClick={handleClick}>
-          <span>File</span> {name}
+          <Image src={icon} alt={name} width={64} height={64} />
+          <div className={styles.dirHeader}>{name}</div>
         </div>
       );
     });
