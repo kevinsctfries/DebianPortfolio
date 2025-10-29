@@ -2,6 +2,7 @@ import About from "@/app/apps/About/About";
 import Terminal from "@/app/apps/Terminal/Terminal";
 import Minesweeper from "@/app/apps/Minesweeper/Minesweeper";
 import FileExplorer from "@/app/apps/FileExplorer/FileExplorer";
+import MonacoEditor from "@/app/apps/Monaco/MonacoEditor";
 
 import minesweeperIcon from "../../assets/apps/minesweeper.webp";
 import terminalIcon from "../../assets/apps/utilities-terminal.svg";
@@ -11,7 +12,12 @@ import folderIcon from "../../assets/system/system-file-manager.svg";
 import type { StaticImageData } from "next/image";
 import type { ComponentType } from "react";
 
-export type AppName = "about" | "terminal" | "minesweeper" | "thunar";
+export type AppName =
+  | "about"
+  | "terminal"
+  | "minesweeper"
+  | "thunar"
+  | "monaco";
 export type DesktopAppProps = Record<string, unknown>;
 
 export type DesktopApp = {
@@ -47,5 +53,11 @@ export const desktopApps: DesktopApp[] = [
     name: "Thunar",
     icon: folderIcon,
     component: FileExplorer,
+  },
+  {
+    id: "monaco",
+    name: "Monaco",
+    icon: folderIcon,
+    component: MonacoEditor,
   },
 ];
