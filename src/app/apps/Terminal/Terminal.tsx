@@ -6,6 +6,7 @@ import type { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import styles from "./terminal.module.scss";
 import { getCommand } from "./commands";
+import { getCwd } from "./commands/cd";
 
 export default function TerminalComponent() {
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -36,27 +37,31 @@ export default function TerminalComponent() {
     term.writeln("Type \x1b[1;33mhelp\x1b[0m for available commands.");
     term.writeln("");
 
-    const PROMPT =
-      "\x1b[0m" +
-      "\x1b[38;2;85;255;85mkevin@portfolio\x1b[0m" +
-      ":\x1b[38;2;79;79;237m~\x1b[0m$ " +
-      "\x1b[0m";
+    const getPrompt = () => {
+      const path = getCwd();
+      const displayPath =
+        path === "/home/Kevin"
+          ? "~"
+          : path === "/"
+          ? "/"
+          : path.split("/").pop() || path;
+      return `\x1b[0m\x1b[38;2;85;255;85mkevin@portfolio\x1b[0m:\x1b[38;2;79;79;237m${displayPath}\x1b[0m$ \x1b[0m`;
+    };
 
     const renderPrompt = () => {
-      term.write(PROMPT);
+      term.write(getPrompt());
     };
 
     renderPrompt();
 
     let inputBuffer = "";
-    const inputFlag: { current: boolean } = { current: false };
+    const inputFlag = { current: false };
 
     term.onData(data => {
       if (inputFlag.current) return;
 
       if (data === "\r") {
         const fullLine = inputBuffer.trim();
-
         term.writeln("");
 
         if (fullLine) {
@@ -64,18 +69,12 @@ export default function TerminalComponent() {
           const cmd = getCommand(cmdName);
 
           if (cmd) {
-            Promise.resolve(cmd.run(term, args, inputFlag))
-              .then(() => {
-                term.writeln("");
-                renderPrompt();
-              })
-              .catch(err => {
-                term.writeln(
-                  `\x1b[31mError: ${err.message || "Command failed"}\x1b[0m`
-                );
-                term.writeln("");
-                renderPrompt();
-              });
+            inputFlag.current = true;
+            Promise.resolve(cmd.run(term, args, inputFlag)).finally(() => {
+              inputFlag.current = false;
+              term.writeln("");
+              renderPrompt();
+            });
           } else {
             term.writeln(`\x1b[31mCommand not found: ${cmdName}\x1b[0m`);
             term.writeln("");

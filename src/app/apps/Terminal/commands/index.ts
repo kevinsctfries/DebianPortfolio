@@ -30,5 +30,6 @@ import help from "./help";
 import clear from "./clear";
 import whoami from "./whoami";
 import sudo from "./sudo";
+import cd from "./cd";
 
-[help, clear, whoami, sudo].forEach(registerCommand);
+[help, clear, whoami, sudo, cd].forEach(registerCommand);
