@@ -2,7 +2,6 @@ import About from "@/app/apps/About/About";
 import Terminal from "@/app/apps/Terminal/Terminal";
 import Minesweeper from "@/app/apps/Minesweeper/Minesweeper";
 import FileExplorer from "@/app/apps/FileExplorer/FileExplorer";
-import MonacoEditor from "@/app/apps/Monaco/MonacoEditor";
 
 import minesweeperIcon from "../../assets/apps/minesweeper.webp";
 import terminalIcon from "../../assets/apps/utilities-terminal.svg";
@@ -53,11 +52,5 @@ export const desktopApps: DesktopApp[] = [
     name: "Thunar",
     icon: folderIcon,
     component: FileExplorer,
-  },
-  {
-    id: "monaco",
-    name: "Monaco",
-    icon: folderIcon,
-    component: MonacoEditor,
   },
 ];
