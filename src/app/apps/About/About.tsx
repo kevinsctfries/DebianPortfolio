@@ -1,26 +1,45 @@
-import styles from "../apps.module.scss";
+import styles from "./about.module.scss";
 
 export default function About() {
   return (
     <div className={styles.about}>
-      <h2>About Me</h2>
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta culpa id
-        unde vero dolores itaque quis rerum hic corporis nulla ratione nam,
-        dolorem deserunt ab! Repellat dolor quibusdam veniam nam?
-      </p>
-      <br />
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
-        necessitatibus enim ipsam blanditiis, vel ex ut nobis molestias sequi
-        qui at illum modi in fuga natus esse hic repellat cum!
-      </p>
-      <br />
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
-        consectetur reiciendis modi libero provident porro ab totam sit nisi
-        quos iure esse magnam optio, soluta ut earum illum animi. Reprehenderit!
-      </p>
+      <div className={styles.header}>
+        <div className={styles.titleArea}>
+          <h1 className={styles.name}>Kevin</h1>
+          <p className={styles.tagline}>Full-Stack Developer</p>
+        </div>
+      </div>
+
+      <div className={styles.content}>
+        <section className={styles.section}>
+          <h2>About</h2>
+          <p>Hi, my name is Kevin. I am a self taught full-stack developer!</p>
+        </section>
+
+        <section className={styles.section}>
+          <h2>Skills</h2>
+          <p>TypeScript/JavaScript, React, Next.js, Angular</p>
+        </section>
+
+        <section className={styles.section}>
+          <h2>Contact</h2>
+          <p>
+            Email: <a href="mailto:">kevinsctfries@gmail.com</a>
+            <br />
+            GitHub:
+            <a href="https://github.com/kevinsctfries">
+              github.com/kevinsctfries
+            </a>
+            <br />
+            Website: <a href="https://kevinsctfries.com">kevinsctfries.com</a>
+          </p>
+        </section>
+
+        <section className={styles.section}>
+          <h2>Credits</h2>
+          <p>Built with Next.js | TypeScript | react-rnd</p>
+        </section>
+      </div>
     </div>
   );
 }
