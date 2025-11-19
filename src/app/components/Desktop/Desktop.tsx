@@ -53,7 +53,14 @@ export default function Desktop() {
 
   // grab my github projects when the page loads
   useEffect(() => {
-    const selectedRepos = [{ owner: "kevinsctfries", repo: "DebianPortfolio" }];
+    const selectedRepos = [
+      { owner: "kevinsctfries", repo: "DebianPortfolio" },
+      { owner: "kevinsctfries", repo: "FingerTapJS" },
+      { owner: "kevinsctfries", repo: "day-trader" },
+      { owner: "kevinsctfries", repo: "ytt-gen" },
+      { owner: "kevinsctfries", repo: "flashy" },
+      { owner: "kevinsctfries", repo: "UNet" },
+    ];
     populateProjects(selectedRepos, linuxFS).then(() =>
       setRefresh(prev => !prev)
     );
