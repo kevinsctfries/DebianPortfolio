@@ -44,20 +44,12 @@ export default function Panel() {
       <button
         aria-label="Menu"
         className={`${styles.menuButton} ${menuOpen ? styles.active : ""}`}
-        onClick={() => {
-          setMenuOpen(!menuOpen);
-        }}>
+        onClick={() => setMenuOpen(prev => !prev)}
+        onMouseDown={e => e.stopPropagation()}>
         <Image src={menuIcon} alt="Open Menu" width={18} height={18} />
       </button>
 
-      {menuOpen && (
-        <Menu
-          onClose={() => {
-            console.log("Closing menu");
-            setMenuOpen(false);
-          }}
-        />
-      )}
+      {menuOpen && <Menu onClose={() => setMenuOpen(false)} />}
 
       <div className={styles.openedApps}>
         {openApps.map(appId => (

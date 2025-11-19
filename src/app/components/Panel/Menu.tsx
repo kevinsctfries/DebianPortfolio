@@ -109,24 +109,22 @@ export default function Menu({ onClose }: MenuProps) {
   }, []);
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
+    const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         onClose();
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
+    };
 
-    // close when any window signals it was interacted with
-    function handleWindowInteracted() {
-      onClose();
-    }
+    document.addEventListener("click", handleClickOutside);
+
+    const handleWindowInteracted = () => onClose();
     document.addEventListener(
       "desktop-window-interacted",
       handleWindowInteracted
     );
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
       document.removeEventListener(
         "desktop-window-interacted",
         handleWindowInteracted
