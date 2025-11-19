@@ -49,8 +49,11 @@ export default function TerminalComponent() {
     renderPrompt();
 
     let inputBuffer = "";
+    const inputFlag: { current: boolean } = { current: false };
 
     term.onData(data => {
+      if (inputFlag.current) return;
+
       if (data === "\r") {
         const fullLine = inputBuffer.trim();
 
@@ -61,19 +64,29 @@ export default function TerminalComponent() {
           const cmd = getCommand(cmdName);
 
           if (cmd) {
-            Promise.resolve(cmd.run(term, args)).catch(err => {
-              term.writeln(
-                `\x1b[31mError: ${err.message || "Command failed"}\x1b[0m`
-              );
-            });
+            Promise.resolve(cmd.run(term, args, inputFlag))
+              .then(() => {
+                term.writeln("");
+                renderPrompt();
+              })
+              .catch(err => {
+                term.writeln(
+                  `\x1b[31mError: ${err.message || "Command failed"}\x1b[0m`
+                );
+                term.writeln("");
+                renderPrompt();
+              });
           } else {
             term.writeln(`\x1b[31mCommand not found: ${cmdName}\x1b[0m`);
+            term.writeln("");
+            renderPrompt();
           }
+        } else {
+          term.writeln("");
+          renderPrompt();
         }
 
         inputBuffer = "";
-        term.writeln("");
-        renderPrompt();
       } else if (data === "\u007F") {
         if (inputBuffer.length > 0) {
           term.write("\b \b");

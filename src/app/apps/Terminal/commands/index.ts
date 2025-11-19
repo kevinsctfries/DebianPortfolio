@@ -1,8 +1,11 @@
 import type { Terminal } from "@xterm/xterm";
 
+type InputFlag = { current: boolean };
+
 export type CommandFn = (
   term: Terminal,
-  args: string[]
+  args: string[],
+  inputFlag?: InputFlag
 ) => Promise<void> | void;
 
 export interface Command {
@@ -26,5 +29,6 @@ export const getAllCommands = (): IterableIterator<Command> =>
 import help from "./help";
 import clear from "./clear";
 import whoami from "./whoami";
+import sudo from "./sudo";
 
-[help, clear, whoami].forEach(registerCommand);
+[help, clear, whoami, sudo].forEach(registerCommand);
