@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
-    "postinstall": "mkdir -p public/_next/static/monaco-editor && cp -r node_modules/monaco-editor/min/vs public/_next/static/monaco-editor/"
+    "lint": "eslint"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.10.0",
