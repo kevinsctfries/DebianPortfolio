@@ -2,107 +2,71 @@
 
 import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
-import "@xterm/xterm/css/xterm.css";
 import type { FitAddon } from "@xterm/addon-fit";
+import "@xterm/xterm/css/xterm.css";
 import styles from "./terminal.module.scss";
 
 export default function TerminalComponent() {
-  const terminalRef = useRef<HTMLDivElement | null>(null);
-  const xtermRef = useRef<Terminal | null>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-  const resizeObserverRef = useRef<ResizeObserver | null>(null);
-  const handleResizeRef = useRef<() => void>(() => {});
 
   useEffect(() => {
-    let mounted = true;
+    if (!terminalRef.current) return;
 
-    async function init() {
-      if (!terminalRef.current || !mounted) return;
-      if (xtermRef.current) return;
+    const term = new Terminal({
+      cursorBlink: true,
+      cursorStyle: "block",
+      fontSize: 16,
+    });
 
-      const { FitAddon } = await import("@xterm/addon-fit");
-
-      const xterm = new Terminal({
-        cursorBlink: true,
-        fontSize: 14,
-        lineHeight: 1.3,
-        letterSpacing: 0,
-        fontFamily: '"JetBrains Mono", "Fira Code", monospace',
-        theme: {
-          background: "#1e1e1e",
-          foreground: "#ffffff",
-        },
-      });
-
+    import("@xterm/addon-fit").then(({ FitAddon }) => {
       const fitAddon = new FitAddon();
-      xterm.loadAddon(fitAddon);
-      xterm.open(terminalRef.current);
-      xterm.focus();
-      fitAddon.fit();
-
-      xtermRef.current = xterm;
+      term.loadAddon(fitAddon);
       fitAddonRef.current = fitAddon;
+      fitAddon.fit();
+    });
 
-      handleResizeRef.current = () => fitAddonRef.current?.fit();
-      window.addEventListener("resize", handleResizeRef.current);
+    term.open(terminalRef.current);
+    term.focus();
 
-      resizeObserverRef.current = new ResizeObserver(() => {
-        fitAddonRef.current?.fit();
-      });
-      resizeObserverRef.current.observe(terminalRef.current);
+    term.clear();
+    term.writeln("\x1b[1;36mWelcome to Kevin's Portfolio Terminal!\x1b[0m");
+    term.writeln("");
+    term.writeln("Type \x1b[1;33mhelp\x1b[0m for available commands.");
+    term.writeln("");
 
-      // custom prompt
-      const prompt = [
-        { text: "kevin@portfolio", color: "#55ff55" },
-        { text: ":" },
-        { text: "~", color: "#4f4fed" },
-        { text: "$ " },
-      ];
+    const PROMPT =
+      "\x1b[38;2;85;255;85mkevin@portfolio\x1b[0m:\x1b[38;2;79;79;237m~\x1b[0m$ ";
 
-      const renderPrompt = () => {
-        prompt.forEach(part => {
-          if (part.color) {
-            const r = parseInt(part.color.slice(1, 3), 16);
-            const g = parseInt(part.color.slice(3, 5), 16);
-            const b = parseInt(part.color.slice(5, 7), 16);
-            xterm.write(`\x1b[38;2;${r};${g};${b}m${part.text}\x1b[0m`);
-          } else {
-            xterm.write(part.text);
-          }
-        });
-      };
+    const renderPrompt = () => {
+      term.write(PROMPT);
+    };
 
-      xterm.write(`Welcome to Kevin's Portfolio Terminal!\r\n`);
-      renderPrompt();
+    renderPrompt();
 
-      xterm.onData(e => {
-        if (e === "\r") {
-          xterm.write(`\r\n`);
-          renderPrompt();
-        } else if (e === "\u007F") {
-          xterm.write("\b \b");
-        } else {
-          xterm.write(e);
+    term.onData(data => {
+      if (data === "\r") {
+        term.writeln("");
+        renderPrompt();
+      } else if (data === "\u007F") {
+        const cursorX = term.buffer.active.cursorX;
+        if (cursorX > PROMPT.length) {
+          term.write("\b \b");
         }
-      });
-    }
+      } else if (data >= " " || data === "\t") {
+        term.write(data);
+      }
+    });
 
-    init();
+    const resizeObserver = new ResizeObserver(() => {
+      fitAddonRef.current?.fit();
+    });
+    resizeObserver.observe(terminalRef.current);
 
     return () => {
-      mounted = false;
-      window.removeEventListener("resize", handleResizeRef.current);
-      if (resizeObserverRef.current) {
-        resizeObserverRef.current.disconnect();
-        resizeObserverRef.current = null;
-      }
-      if (xtermRef.current) {
-        try {
-          xtermRef.current.dispose();
-        } catch {}
-        xtermRef.current = null;
-      }
+      resizeObserver.disconnect();
       fitAddonRef.current = null;
+      term.dispose();
     };
   }, []);
 
