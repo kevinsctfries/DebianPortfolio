@@ -108,7 +108,6 @@ export default function Desktop() {
     });
   }, [desktopFolders]);
 
-  // handle dragging icons around – swap if you drop on another
   const handleDrag = (id: string, x: number, y: number) => {
     const snappedX = snapToGrid(x);
     const snappedY = snapToGrid(y);
@@ -134,7 +133,7 @@ export default function Desktop() {
   return (
     <div className={styles.desktop}>
       {/* app icons */}
-      {desktopApps.map((app, idx) => (
+      {desktopApps.map(app => (
         <DesktopIcon
           key={app.id}
           name={app.name}
@@ -147,7 +146,7 @@ export default function Desktop() {
       ))}
 
       {/* folder icons */}
-      {desktopFolders.map((folder, idx) => (
+      {desktopFolders.map(folder => (
         <DesktopIcon
           key={folder.id}
           name={folder.name}
