@@ -5,6 +5,7 @@ import { Terminal } from "@xterm/xterm";
 import type { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import styles from "./terminal.module.scss";
+import { getCommand } from "./commands";
 
 export default function TerminalComponent() {
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,10 @@ export default function TerminalComponent() {
     term.writeln("");
 
     const PROMPT =
-      "\x1b[38;2;85;255;85mkevin@portfolio\x1b[0m:\x1b[38;2;79;79;237m~\x1b[0m$ ";
+      "\x1b[0m" +
+      "\x1b[38;2;85;255;85mkevin@portfolio\x1b[0m" +
+      ":\x1b[38;2;79;79;237m~\x1b[0m$ " +
+      "\x1b[0m";
 
     const renderPrompt = () => {
       term.write(PROMPT);
@@ -44,17 +48,40 @@ export default function TerminalComponent() {
 
     renderPrompt();
 
+    let inputBuffer = "";
+
     term.onData(data => {
       if (data === "\r") {
+        const fullLine = inputBuffer.trim();
+
+        term.writeln("");
+
+        if (fullLine) {
+          const [cmdName, ...args] = fullLine.split(" ");
+          const cmd = getCommand(cmdName);
+
+          if (cmd) {
+            Promise.resolve(cmd.run(term, args)).catch(err => {
+              term.writeln(
+                `\x1b[31mError: ${err.message || "Command failed"}\x1b[0m`
+              );
+            });
+          } else {
+            term.writeln(`\x1b[31mCommand not found: ${cmdName}\x1b[0m`);
+          }
+        }
+
+        inputBuffer = "";
         term.writeln("");
         renderPrompt();
       } else if (data === "\u007F") {
-        const cursorX = term.buffer.active.cursorX;
-        if (cursorX > PROMPT.length) {
+        if (inputBuffer.length > 0) {
           term.write("\b \b");
+          inputBuffer = inputBuffer.slice(0, -1);
         }
       } else if (data >= " " || data === "\t") {
         term.write(data);
+        inputBuffer += data;
       }
     });
 
