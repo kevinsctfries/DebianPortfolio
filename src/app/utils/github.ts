@@ -13,8 +13,18 @@ type GitHubTreeItem = {
 
 export async function fetchRepoTree(owner: string, repo: string) {
   const res = await fetch(`/api/github/repos/${owner}/${repo}/tree`);
-  if (!res.ok) throw new Error(`Failed to fetch ${repo}`);
+
+  if (!res.ok) {
+    if (res.status === 403) {
+      throw new Error(
+        `GitHub rate limited. Try again in 1 hour or add a Personal Access Token.`
+      );
+    }
+
+    throw new Error(`failed to fetch ${repo}: ${res.status}`);
+  }
   const data = await res.json();
+
   return data.tree.map((item: GitHubTreeItem) => ({
     name: item.path.split("/").pop(),
     path: item.path,
@@ -83,6 +93,12 @@ export async function populateProjects(
       projectsNode.contents![r.repo] = repoNode;
     } catch (err) {
       console.error("Failed to load repo", r.repo, err);
+
+      projectsNode.contents![r.repo] = {
+        type: "directory",
+        description: `${r.repo} (offline - rated limited)`,
+        contents: {},
+      };
     }
   }
 }
