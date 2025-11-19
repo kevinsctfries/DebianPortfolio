@@ -64,6 +64,7 @@
         cursor: pointer;
         background: #444;
         font-weight: bold;
+        -webkit-user-select: none;
         user-select: none;
 
         &.revealed {
