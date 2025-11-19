@@ -25,8 +25,8 @@ export default function Window({
   zIndex = 1,
   defaultX = 100,
   defaultY = 100,
-  width = 400,
-  height = 300,
+  width = 800,
+  height = 600,
   fixedSize = false,
 }: WindowProps) {
   return (
