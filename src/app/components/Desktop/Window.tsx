@@ -69,7 +69,9 @@ export default function Window({
         }
       }}>
       <div className={styles.inner}>
-        <div className={styles.titlebar}>
+        <div
+          className={styles.titlebar}
+          onDoubleClick={() => toggleMaximized(title)}>
           <span>{title}</span>
           <div className={styles.controls}>
             <button
