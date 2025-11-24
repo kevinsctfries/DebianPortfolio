@@ -60,10 +60,44 @@ export default function Window({
         <div className={styles.titlebar}>
           <span>{title}</span>
           <div className={styles.controls}>
-            <button className={styles.btn}>_</button>
-            <button className={styles.btn}>□</button>
-            <button onClick={onClose} className={styles.btn}>
-              ×
+            <button className={styles.minimize} aria-label="Minimize">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <line
+                  x1="2"
+                  y1="7"
+                  x2="8"
+                  y2="7"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+            <button className={styles.maximize} aria-label="Maximize">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <rect
+                  x="2"
+                  y="2"
+                  width="6"
+                  height="6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={onClose}
+              className={styles.close}
+              aria-label="Close">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <path
+                  d="M2 2 L8 8 M8 2 L2 8"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
             </button>
           </div>
         </div>
