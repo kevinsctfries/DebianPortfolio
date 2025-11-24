@@ -56,9 +56,7 @@ export default function Window({
         height,
       }}
       position={isMaximized ? { x: 0, y: 0 } : undefined}
-      size={
-        isMaximized ? { width: "100vw", height: "100vh" } : { width, height }
-      }
+      size={isMaximized ? { width: "100vw", height: "100vh" } : undefined}
       minWidth={200}
       minHeight={100}
       bounds="parent"
