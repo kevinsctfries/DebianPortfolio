@@ -2,7 +2,7 @@
 
 import { Rnd } from "react-rnd";
 import styles from "./window.module.scss";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import { useDesktop } from "./DesktopContext";
 import type { AppName } from "./appData";
 
@@ -35,6 +35,17 @@ export default function Window({
     useDesktop();
   const isMinimized = minimizedApps.has(title);
   const isMaximized = maximizedApps.has(title);
+  const lastTouchTimeRef = useRef<number>(0);
+
+  const onDoubleTap = () => {
+    const now = Date.now();
+    const isDoubleTap = now - lastTouchTimeRef.current < 300;
+    lastTouchTimeRef.current = now;
+
+    if (isDoubleTap) {
+      toggleMaximized(title);
+    }
+  };
 
   return (
     <Rnd
@@ -71,7 +82,8 @@ export default function Window({
       <div className={styles.inner}>
         <div
           className={styles.titlebar}
-          onDoubleClick={() => toggleMaximized(title)}>
+          onDoubleClick={() => toggleMaximized(title)}
+          onTouchEnd={onDoubleTap}>
           <span>{title}</span>
           <div className={styles.controls}>
             <button
