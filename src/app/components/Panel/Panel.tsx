@@ -13,7 +13,14 @@ import menuIcon from "../../assets/system/distributor-logo-xubuntu.svg";
 
 export default function Panel() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { openApps, openApp, activeApp, bringToFront } = useDesktop();
+  const {
+    openApps,
+    openApp,
+    activeApp,
+    bringToFront,
+    minimizedApps,
+    toggleMinimized,
+  } = useDesktop();
   const [time, setTime] = useState<Date | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -59,8 +66,10 @@ export default function Panel() {
               activeApp === appId ? styles.active : ""
             }`}
             onClick={() => {
-              if (activeApp !== appId) bringToFront(appId);
-              else bringToFront(appId);
+              if (minimizedApps.has(appId)) {
+                toggleMinimized(appId);
+              }
+              bringToFront(appId);
             }}
             title={appId}>
             <Image src={getAppIcon(appId)} alt={appId} width={20} height={20} />

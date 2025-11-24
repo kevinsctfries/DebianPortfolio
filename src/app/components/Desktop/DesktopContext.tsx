@@ -11,6 +11,10 @@ type DesktopContextType = {
   getZIndex: (app: AppName) => number;
   activeApp: AppName | null;
   appProps: Partial<Record<AppName, Record<string, unknown>>>;
+  minimizedApps: Set<AppName>;
+  toggleMinimized: (app: AppName) => void;
+  maximizedApps: Set<AppName>;
+  toggleMaximized: (app: AppName) => void;
 };
 
 export const GRID_SIZE = 80;
@@ -27,6 +31,8 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
   const [appProps, setAppProps] = useState<
     Partial<Record<AppName, Record<string, unknown>>>
   >({});
+  const [minimizedApps, setMinimizedApps] = useState<Set<AppName>>(new Set());
+  const [maximizedApps, setMaximizedApps] = useState<Set<AppName>>(new Set());
 
   const activeApp =
     openApps.length > 0
@@ -42,8 +48,18 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
 
     if (!openApps.includes(app)) {
       setOpenApps(prev => [...prev, app]);
+      setMinimizedApps(prev => {
+        const next = new Set(prev);
+        next.delete(app);
+        return next;
+      });
       bringToFront(app);
     } else {
+      setMinimizedApps(prev => {
+        const next = new Set(prev);
+        next.delete(app);
+        return next;
+      });
       bringToFront(app);
     }
   }
@@ -60,6 +76,16 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
       delete copy[app];
       return copy;
     });
+    setMinimizedApps(prev => {
+      const next = new Set(prev);
+      next.delete(app);
+      return next;
+    });
+    setMaximizedApps(prev => {
+      const next = new Set(prev);
+      next.delete(app);
+      return next;
+    });
   }
 
   function bringToFront(app: AppName) {
@@ -69,7 +95,31 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
   }
 
   function getZIndex(app: AppName) {
-    return zIndexes[app] ?? 1;
+    return minimizedApps.has(app) ? -1 : zIndexes[app] ?? 1;
+  }
+
+  function toggleMinimized(app: AppName) {
+    setMinimizedApps(prev => {
+      const next = new Set(prev);
+      if (next.has(app)) {
+        next.delete(app);
+      } else {
+        next.add(app);
+      }
+      return next;
+    });
+  }
+
+  function toggleMaximized(app: AppName) {
+    setMaximizedApps(prev => {
+      const next = new Set(prev);
+      if (next.has(app)) {
+        next.delete(app);
+      } else {
+        next.add(app);
+      }
+      return next;
+    });
   }
 
   return (
@@ -82,6 +132,10 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
         getZIndex,
         activeApp,
         appProps,
+        minimizedApps,
+        toggleMinimized,
+        maximizedApps,
+        toggleMaximized,
       }}>
       {children}
     </DesktopContext.Provider>

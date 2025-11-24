@@ -3,9 +3,11 @@
 import { Rnd } from "react-rnd";
 import styles from "./window.module.scss";
 import { ReactNode } from "react";
+import { useDesktop } from "./DesktopContext";
+import type { AppName } from "./appData";
 
 type WindowProps = {
-  title: string;
+  title: AppName;
   children: ReactNode;
   onClose?: () => void;
   onFocus?: () => void;
@@ -29,6 +31,11 @@ export default function Window({
   height = 600,
   fixedSize = false,
 }: WindowProps) {
+  const { minimizedApps, toggleMinimized, maximizedApps, toggleMaximized } =
+    useDesktop();
+  const isMinimized = minimizedApps.has(title);
+  const isMaximized = maximizedApps.has(title);
+
   return (
     <Rnd
       default={{
@@ -37,11 +44,16 @@ export default function Window({
         width,
         height,
       }}
+      position={isMaximized ? { x: 0, y: 0 } : undefined}
+      size={
+        isMaximized ? { width: "100vw", height: "100vh" } : { width, height }
+      }
       minWidth={200}
       minHeight={100}
       bounds="parent"
       dragHandleClassName={styles.titlebar}
-      enableResizing={fixedSize ? false : undefined}
+      enableResizing={fixedSize || isMaximized ? false : true}
+      disableDragging={isMaximized}
       className={styles.window}
       style={{ zIndex }}
       onMouseDown={() => {
@@ -60,7 +72,10 @@ export default function Window({
         <div className={styles.titlebar}>
           <span>{title}</span>
           <div className={styles.controls}>
-            <button className={styles.minimize} aria-label="Minimize">
+            <button
+              className={styles.minimize}
+              aria-label="Minimize"
+              onClick={() => toggleMinimized(title)}>
               <svg viewBox="0 0 10 10" width="10" height="10">
                 <line
                   x1="2"
@@ -73,7 +88,10 @@ export default function Window({
                 />
               </svg>
             </button>
-            <button className={styles.maximize} aria-label="Maximize">
+            <button
+              className={styles.maximize}
+              aria-label="Maximize"
+              onClick={() => toggleMaximized(title)}>
               <svg viewBox="0 0 10 10" width="10" height="10">
                 <rect
                   x="2"
@@ -101,7 +119,7 @@ export default function Window({
             </button>
           </div>
         </div>
-        <div className={styles.content}>{children}</div>
+        {!isMinimized && <div className={styles.content}>{children}</div>}
       </div>
     </Rnd>
   );
