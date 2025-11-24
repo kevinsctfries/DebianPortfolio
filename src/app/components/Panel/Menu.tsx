@@ -105,7 +105,10 @@ export default function Menu({ onClose }: MenuProps) {
   };
 
   useEffect(() => {
-    searchRef.current?.focus();
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!isMobile) {
+      searchRef.current?.focus();
+    }
   }, []);
 
   useEffect(() => {

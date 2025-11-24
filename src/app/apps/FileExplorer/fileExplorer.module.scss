@@ -205,9 +205,26 @@
             background: var(--theme-bg-color);
             border-top: 1px solid var(--borders);
             padding-left: 1rem;
+        }
+    }
+}
 
-            span {
+@media screen and (max-width: 768px) {
+    .explorer {
+        .toolbar {
+            .actions {
+                button {
+                    margin-left: 0;
+                }
+
+                .dirPath {
+                    .pathSegment {
+                    }
+                }
             }
+        }
+        .sidebar {
+            width: 120px;
         }
     }
 }

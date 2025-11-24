@@ -60,19 +60,6 @@
                 }
             }
         }
-
-        // &::-webkit-scrollbar {
-        //     width: 6px;
-        // }
-
-        // &::-webkit-scrollbar-track {
-        //     background: var(--menu-scrollbar-track);
-        // }
-
-        // &::-webkit-scrollbar-thumb {
-        //     background: var(--menu-scrollbar-thumb);
-        //     border-radius: 3px;
-        // }
     }
 
     .sidebar {
@@ -193,11 +180,18 @@
             font-size: 12px;
             color: var(--menu-text);
             transition: all 0.2s;
+            font-size: 16px;
 
             &:focus {
                 outline: none;
                 border-color: var(--theme-selected-bg-color);
             }
         }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .menu {
+        width: 100%;
     }
 }
