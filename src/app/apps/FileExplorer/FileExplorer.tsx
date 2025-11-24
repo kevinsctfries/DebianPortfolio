@@ -82,7 +82,9 @@ export default function FileExplorer({
   startNode,
   startPath,
 }: FileExplorerProps) {
-  const [path, setPath] = useState<string[]>(startPath ?? ["/"]);
+  const [path, setPath] = useState<string[]>(
+    startPath ?? ["/", "home", "Kevin"]
+  );
   const [history, setHistory] = useState<string[][]>([["/"]]);
   const [historyIndex, setHistoryIndex] = useState(0);
 

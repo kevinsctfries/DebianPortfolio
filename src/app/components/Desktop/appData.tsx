@@ -49,7 +49,7 @@ export const desktopApps: DesktopApp[] = [
   },
   {
     id: "thunar",
-    name: "Thunar",
+    name: "Home",
     icon: folderIcon,
     component: FileExplorer,
   },
