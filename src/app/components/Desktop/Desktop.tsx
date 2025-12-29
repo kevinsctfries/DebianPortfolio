@@ -140,17 +140,20 @@ export default function Desktop() {
   return (
     <div className={styles.desktop}>
       {/* app icons */}
-      {desktopApps.map(app => (
-        <DesktopIcon
-          key={app.id}
-          name={app.name}
-          icon={app.icon.src}
-          x={iconPositions[app.id]?.x ?? 0}
-          y={iconPositions[app.id]?.y ?? 0}
-          onDragStop={(x, y) => handleDrag(app.id, x, y)}
-          onClick={() => openApp(app.id)}
-        />
-      ))}
+      {desktopApps
+        .filter(app => app.showOnDesktop !== false)
+        .map((app, index) => (
+          <DesktopIcon
+            key={app.id}
+            name={app.name}
+            icon={app.icon.src}
+            x={iconPositions[app.id]?.x ?? 0}
+            y={iconPositions[app.id]?.y ?? getInitialPosition(index).y}
+            onClick={() => openApp(app.id)}
+            onDragStop={(x, y) => handleDrag(app.id, x, y)}
+            onDrag={(x, y) => setRefresh(prev => !prev)}
+          />
+        ))}
 
       {/* folder icons */}
       {desktopFolders.map(folder => (
