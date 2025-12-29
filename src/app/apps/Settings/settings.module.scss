@@ -1,0 +1,49 @@
+.settings {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background: var(--theme-bg-color);
+    font-size: 12px;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+
+    .search {
+        padding: 0.3rem;
+        width: 33%;
+        margin-left: auto;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .stuff {
+        background: var(--theme-base-color);
+        height: 100%;
+        margin: 0.5rem;
+        border: 1px solid black;
+
+        > span {
+            display: flex;
+            flex-direction: column;
+            color: var(--theme-text-color);
+            font-weight: bold;
+            border-bottom: 1px solid var(--borders);
+            margin: 0.5rem;
+            padding-bottom: 1px;
+            list-style-type: none;
+        }
+
+        .settingsApps {
+            margin: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem 1.5rem;
+            align-items: center;
+
+            span {
+                cursor: pointer;
+            }
+        }
+    }
+}
