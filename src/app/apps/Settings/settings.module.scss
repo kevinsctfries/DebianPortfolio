@@ -46,4 +46,19 @@
             }
         }
     }
+
+    .footer {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+            margin: 0.5rem;
+            padding: 0.5rem 2rem;
+        }
+
+        .rightBtns {
+            display: flex;
+            gap: 0.25rem;
+        }
+    }
 }

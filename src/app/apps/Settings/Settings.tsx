@@ -42,10 +42,12 @@ const Settings = () => {
           <span>Settings Editor</span>
         </div>
       </div>
-      <div>
+      <div className={styles.footer}>
         <button>Help</button>
-        <button>All Settings</button>
-        <button>Close</button>
+        <div className={styles.rightBtns}>
+          <button>All Settings</button>
+          <button>Close</button>
+        </div>
       </div>
     </div>
   );
