@@ -6,11 +6,20 @@ import type { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import styles from "./terminal.module.scss";
 import { getCommand } from "./commands";
+import { getAllCommands } from "./commands";
+import {
+  getDirEntries,
+  resolvePath,
+  HOME_PATH,
+  formatPromptPath,
+} from "@/app/utils/linux-fs";
 
-const PROMPT =
+import type { TerminalContext } from "./commands";
+
+const buildPrompt = (pathDisplay: string) =>
   "\x1b[0m" +
   "\x1b[38;2;85;255;85mkevin@portfolio\x1b[0m" +
-  ":\x1b[38;2;79;79;237m~\x1b[0m$ " +
+  `:\x1b[38;2;79;79;237m${pathDisplay}\x1b[0m$ ` +
   "\x1b[0m";
 
 export default function TerminalComponent() {
@@ -42,7 +51,10 @@ export default function TerminalComponent() {
     term.writeln("Type \x1b[1;33mhelp\x1b[0m for available commands.");
     term.writeln("");
 
-    const renderPrompt = () => term.write(PROMPT);
+    // current working directory, tracked as a path array
+    let cwd: string[] = [...HOME_PATH];
+
+    const renderPrompt = () => term.write(buildPrompt(formatPromptPath(cwd)));
     renderPrompt();
 
     // line state
@@ -60,7 +72,7 @@ export default function TerminalComponent() {
     const redrawLine = () => {
       // \x1b[2K clears the whole line, \r returns to column 0
       term.write("\x1b[2K\r");
-      term.write(PROMPT);
+      term.write(buildPrompt(formatPromptPath(cwd)));
       term.write(inputBuffer);
       const moveLeft = inputBuffer.length - cursorPos;
       if (moveLeft > 0) term.write(`\x1b[${moveLeft}D`);
@@ -73,8 +85,84 @@ export default function TerminalComponent() {
       draftBeforeHistory = "";
     };
 
+    const longestCommonPrefix = (strings: string[]): string => {
+      if (strings.length === 0) return "";
+      let prefix = strings[0];
+      for (const s of strings.slice(1)) {
+        while (!s.startsWith(prefix)) {
+          prefix = prefix.slice(0, -1);
+          if (!prefix) return "";
+        }
+      }
+      return prefix;
+    };
+
+    const completeInput = () => {
+      // only complete when the cursor is at the end of the buffer
+      if (cursorPos !== inputBuffer.length) return;
+
+      const tokens = inputBuffer.split(" ");
+      const isFirstToken = tokens.length === 1;
+      const partial = tokens[tokens.length - 1];
+
+      let matches: string[] = [];
+      let replaceFrom = "";
+
+      if (isFirstToken) {
+        // completing a command name
+        matches = Array.from(getAllCommands())
+          .map((c) => c.name)
+          .filter((name) => name.startsWith(partial));
+      } else {
+        // completing a file/directory argument
+        const lastSlash = partial.lastIndexOf("/");
+        const dirPart = lastSlash >= 0 ? partial.slice(0, lastSlash) : "";
+        const namePart =
+          lastSlash >= 0 ? partial.slice(lastSlash + 1) : partial;
+
+        const dirPath =
+          dirPart === "" ? cwd : resolvePath(cwd, dirPart || undefined);
+
+        replaceFrom = lastSlash >= 0 ? partial.slice(0, lastSlash + 1) : "";
+
+        matches = getDirEntries(dirPath)
+          .filter((entry) => entry.name.startsWith(namePart))
+          .map((entry) =>
+            entry.type === "directory" ? `${entry.name}/` : entry.name,
+          );
+      }
+
+      if (matches.length === 0) {
+        term.write("\x07");
+        return;
+      }
+
+      const rawPartial = isFirstToken
+        ? partial
+        : partial.slice(replaceFrom.length);
+      const completed =
+        matches.length === 1 ? matches[0] : longestCommonPrefix(matches);
+
+      if (completed.length <= rawPartial.length) {
+        term.writeln("");
+        term.writeln(matches.join("   "));
+        renderPrompt();
+        term.write(inputBuffer);
+        return;
+      }
+
+      const newLastToken = isFirstToken ? completed : replaceFrom + completed;
+      tokens[tokens.length - 1] = newLastToken;
+      const newBuffer = tokens.join(" ");
+
+      const added = newBuffer.slice(inputBuffer.length);
+      inputBuffer = newBuffer;
+      cursorPos = inputBuffer.length;
+      term.write(added);
+    };
+
     term.onData((data) => {
-      if (busy) return;
+      if (busy) return; // ignore keystrokes while a command is running
 
       const atEnd = cursorPos === inputBuffer.length;
 
@@ -89,8 +177,15 @@ export default function TerminalComponent() {
             const cmd = getCommand(cmdName);
 
             if (cmd) {
+              const ctx: TerminalContext = {
+                cwd,
+                setCwd: (newPath) => {
+                  cwd = newPath;
+                },
+              };
+
               busy = true;
-              Promise.resolve(cmd.run(term, args))
+              Promise.resolve(cmd.run(term, args, ctx))
                 .catch((err) => {
                   term.writeln(
                     `\x1b[31mError: ${err?.message || "Command failed"}\x1b[0m`,
@@ -102,7 +197,7 @@ export default function TerminalComponent() {
                   renderPrompt();
                 });
               resetLine();
-              return;
+              return; // dont fall through to the shared prompt render below
             } else {
               term.writeln(`\x1b[31mCommand not found: ${cmdName}\x1b[0m`);
             }
@@ -181,8 +276,13 @@ export default function TerminalComponent() {
           }
           return;
 
+        case "\t": // tab
+          completeInput();
+          return;
+
         default:
-          if (data >= " " || data === "\t") {
+          // printable characters and tab. ignore other escape sequences/control codes
+          if (data >= " ") {
             inputBuffer =
               inputBuffer.slice(0, cursorPos) +
               data +

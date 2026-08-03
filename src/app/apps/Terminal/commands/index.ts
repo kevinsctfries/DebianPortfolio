@@ -1,8 +1,14 @@
 import type { Terminal } from "@xterm/xterm";
 
+export type TerminalContext = {
+  cwd: string[];
+  setCwd: (path: string[]) => void;
+};
+
 export type CommandFn = (
   term: Terminal,
-  args: string[]
+  args: string[],
+  ctx: TerminalContext,
 ) => Promise<void> | void;
 
 export interface Command {
@@ -26,5 +32,6 @@ export const getAllCommands = (): IterableIterator<Command> =>
 import help from "./help";
 import clear from "./clear";
 import whoami from "./whoami";
+import cd from "./cd";
 
-[help, clear, whoami].forEach(registerCommand);
+[help, clear, whoami, cd].forEach(registerCommand);
