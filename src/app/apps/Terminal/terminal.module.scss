@@ -18,7 +18,12 @@
 
     :global(.xterm .xterm-viewport) {
         background-color: transparent !important;
-        overflow: hidden !important;
+        overflow-y: auto !important;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     :global(.xterm .xterm-screen) {
@@ -35,7 +40,7 @@
     }
 
     :global(.xterm .xterm-char-measure-element) {
-        font-family: "JetBrains Mono", "Fira Code", "DejaVu Sans Mono", Menlo, monospace !important;
+        font-family: var(--font-mono), monospace !important;
         font-size: inherit !important;
     }
 }

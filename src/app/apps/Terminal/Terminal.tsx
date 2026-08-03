@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
-import type { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import styles from "./terminal.module.scss";
 import { getCommand } from "./commands";
@@ -14,6 +13,7 @@ import {
   formatPromptPath,
 } from "@/app/utils/linux-fs";
 
+import type { FitAddon } from "@xterm/addon-fit";
 import type { TerminalContext } from "./commands";
 
 const buildPrompt = (pathDisplay: string) =>
@@ -33,6 +33,7 @@ export default function TerminalComponent() {
       cursorBlink: true,
       cursorStyle: "block",
       fontSize: 16,
+      fontFamily: "var(--font-mono), monospace",
     });
 
     import("@xterm/addon-fit").then(({ FitAddon }) => {
@@ -40,6 +41,10 @@ export default function TerminalComponent() {
       term.loadAddon(fitAddon);
       fitAddonRef.current = fitAddon;
       fitAddon.fit();
+
+      document.fonts.ready.then(() => {
+        fitAddon.fit();
+      });
     });
 
     term.open(terminalRef.current);
