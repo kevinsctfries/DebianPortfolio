@@ -55,6 +55,9 @@ export type FileNode = {
   description: string;
   contents?: Record<string, FileNode>;
   link?: string;
+  owner?: string;
+  repo?: string;
+  sha?: string;
 };
 
 type FileTree = {
@@ -83,14 +86,14 @@ export default function FileExplorer({
   startPath,
 }: FileExplorerProps) {
   const [path, setPath] = useState<string[]>(
-    startPath ?? ["/", "home", "Kevin"]
+    startPath ?? ["/", "home", "Kevin"],
   );
   const [history, setHistory] = useState<string[][]>([["/"]]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const getNodeAtPath = (
     pathArr: string[],
-    tree: FileTree
+    tree: FileTree,
   ): FileNode | null => {
     if (!pathArr || pathArr.length === 0) return null;
 
@@ -144,7 +147,7 @@ export default function FileExplorer({
       navigateTo(
         node.link.split("/").filter(Boolean).length
           ? node.link.split("/")
-          : ["/"]
+          : ["/"],
       );
     } else {
       navigateTo([...path, dir]);
@@ -198,14 +201,14 @@ export default function FileExplorer({
   };
 
   const folderCount = items.filter(
-    ([_, node]) => node.type === "directory"
+    ([_, node]) => node.type === "directory",
   ).length;
   const fileCount = items.filter(([_, node]) => node.type === "file").length;
 
   const getSegmentIcon = (
     segment: string,
     index: number,
-    pathArr: string[]
+    pathArr: string[],
   ) => {
     if (index === 0 && segment === "/") {
       return fsFlat;
@@ -281,7 +284,8 @@ export default function FileExplorer({
             key={name}
             className={`${styles.dir} ${isSelected ? styles.selected : ""}`}
             onClick={handleClick}
-            onDoubleClick={() => enterDir(name)}>
+            onDoubleClick={() => enterDir(name)}
+          >
             <Image src={icon} alt={name} width={64} height={64} />
             <div className={styles.dirHeader}>{name}</div>
           </div>
@@ -292,7 +296,8 @@ export default function FileExplorer({
         <div
           key={name}
           className={`${styles.file} ${isSelected ? styles.selected : ""}`}
-          onClick={handleClick}>
+          onClick={handleClick}
+        >
           <Image src={icon} alt={name} width={64} height={64} />
           <div className={styles.dirHeader}>{name}</div>
         </div>
@@ -314,7 +319,8 @@ export default function FileExplorer({
           <button
             aria-label="Go Back"
             onClick={goBackDir}
-            disabled={historyIndex === 0}>
+            disabled={historyIndex === 0}
+          >
             <Image
               src={goBack}
               alt="Back"
@@ -326,7 +332,8 @@ export default function FileExplorer({
           <button
             aria-label="Go Forward"
             onClick={goForwardDir}
-            disabled={historyIndex === history.length - 1}>
+            disabled={historyIndex === history.length - 1}
+          >
             <Image
               src={goForward}
               alt="Forward"
@@ -359,7 +366,7 @@ export default function FileExplorer({
                 <input
                   type="text"
                   value={editPath}
-                  onChange={e => setEditPath(e.target.value)}
+                  onChange={(e) => setEditPath(e.target.value)}
                   onBlur={() => setIsEditingPath(false)}
                   autoFocus
                   className={styles.pathInput}
@@ -381,7 +388,8 @@ export default function FileExplorer({
                     className={`${styles.pathSegment} ${
                       path.length === 1 ? styles.active : ""
                     }`}
-                    onClick={() => navigateTo(["/"])}>
+                    onClick={() => navigateTo(["/"])}
+                  >
                     <Image
                       src={fsFlat}
                       alt="File System"
@@ -414,7 +422,8 @@ export default function FileExplorer({
                       className={`${styles.pathSegment} ${
                         isActive ? styles.active : ""
                       }`}
-                      onClick={() => navigateTo(subPath)}>
+                      onClick={() => navigateTo(subPath)}
+                    >
                       {icon && (
                         <Image
                           src={icon}
@@ -460,7 +469,8 @@ export default function FileExplorer({
             <ul>
               <li
                 className={isActivePath(["computer:///"]) ? styles.active : ""}
-                onClick={() => navigateTo(["computer:///"])}>
+                onClick={() => navigateTo(["computer:///"])}
+              >
                 <Image
                   src={computerIcon}
                   alt="Computer"
@@ -474,7 +484,8 @@ export default function FileExplorer({
                 className={
                   isActivePath(["/", "home", "Kevin"]) ? styles.active : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin"])}
+              >
                 <Image src={homeIcon} alt="Home" width={16} height={16} />
                 kevin
               </li>
@@ -485,14 +496,16 @@ export default function FileExplorer({
                     ? styles.active
                     : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Desktop"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin", "Desktop"])}
+              >
                 <Image src={desktopIcon} alt="Desktop" width={16} height={16} />
                 Desktop
               </li>
 
               <li
                 className={isActivePath(["trash:///"]) ? styles.active : ""}
-                onClick={() => navigateTo(["trash:///"])}>
+                onClick={() => navigateTo(["trash:///"])}
+              >
                 <Image src={trashIcon} alt="Trash" width={16} height={16} />
                 Trash
               </li>
@@ -503,7 +516,8 @@ export default function FileExplorer({
                     ? styles.active
                     : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Documents"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin", "Documents"])}
+              >
                 <Image
                   src={documentsIcon}
                   alt="Documents"
@@ -519,7 +533,8 @@ export default function FileExplorer({
                     ? styles.active
                     : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Music"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin", "Music"])}
+              >
                 <Image src={musicIcon} alt="Music" width={16} height={16} />
                 Music
               </li>
@@ -530,7 +545,8 @@ export default function FileExplorer({
                     ? styles.active
                     : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Pictures"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin", "Pictures"])}
+              >
                 <Image
                   src={picturesIcon}
                   alt="Pictures"
@@ -546,7 +562,8 @@ export default function FileExplorer({
                     ? styles.active
                     : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Videos"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin", "Videos"])}
+              >
                 <Image src={videosIcon} alt="Videos" width={16} height={16} />
                 Videos
               </li>
@@ -557,7 +574,8 @@ export default function FileExplorer({
                     ? styles.active
                     : ""
                 }
-                onClick={() => navigateTo(["/", "home", "Kevin", "Downloads"])}>
+                onClick={() => navigateTo(["/", "home", "Kevin", "Downloads"])}
+              >
                 <Image
                   src={downloadsIcon}
                   alt="Downloads"
@@ -573,7 +591,8 @@ export default function FileExplorer({
             <ul>
               <li
                 className={isActivePath(["/"]) ? styles.active : ""}
-                onClick={() => navigateTo(["/"])}>
+                onClick={() => navigateTo(["/"])}
+              >
                 <Image src={fsIcon} alt="File System" width={16} height={16} />
                 File System
               </li>

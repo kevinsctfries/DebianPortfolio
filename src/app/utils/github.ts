@@ -3,12 +3,14 @@ export type GitHubFile = {
   type: "file" | "dir";
   path: string;
   url: string;
+  sha: string;
 };
 
 type GitHubTreeItem = {
   path: string;
   type: "tree" | "blob";
   url: string;
+  sha: string;
 };
 
 export async function fetchRepoTree(owner: string, repo: string) {
@@ -17,10 +19,9 @@ export async function fetchRepoTree(owner: string, repo: string) {
   if (!res.ok) {
     if (res.status === 403) {
       throw new Error(
-        `GitHub rate limited. Try again in 1 hour or add a Personal Access Token.`
+        `GitHub rate limited. Try again in 1 hour or add a Personal Access Token.`,
       );
     }
-
     throw new Error(`failed to fetch ${repo}: ${res.status}`);
   }
   const data = await res.json();
@@ -30,14 +31,16 @@ export async function fetchRepoTree(owner: string, repo: string) {
     path: item.path,
     type: item.type === "tree" ? "dir" : "file",
     url: item.url,
+    sha: item.sha,
   }));
 }
 
 import type { FileNode } from "@/app/apps/FileExplorer/FileExplorer";
 
 export function buildFileNodeFromRepo(
+  owner: string,
   repoName: string,
-  files: GitHubFile[]
+  files: GitHubFile[],
 ): FileNode {
   const root: FileNode = {
     type: "directory",
@@ -45,7 +48,7 @@ export function buildFileNodeFromRepo(
     contents: {},
   };
 
-  files.forEach(file => {
+  files.forEach((file) => {
     const parts = file.path.split("/");
     let node = root;
 
@@ -55,10 +58,16 @@ export function buildFileNodeFromRepo(
       if (!node.contents) node.contents = {};
 
       if (i === parts.length - 1) {
-        node.contents[part] = {
-          type: file.type === "dir" ? "directory" : "file",
-          description: file.name,
-        };
+        node.contents[part] =
+          file.type === "dir"
+            ? { type: "directory", description: part, contents: {} }
+            : {
+                type: "file",
+                description: part,
+                owner,
+                repo: repoName,
+                sha: file.sha,
+              };
       } else {
         if (!node.contents[part]) {
           node.contents[part] = {
@@ -67,7 +76,6 @@ export function buildFileNodeFromRepo(
             contents: {},
           };
         }
-
         node = node.contents[part];
       }
     }
@@ -78,7 +86,7 @@ export function buildFileNodeFromRepo(
 
 export async function populateProjects(
   selectedRepos: { owner: string; repo: string }[],
-  linuxFS: Record<string, FileNode>
+  linuxFS: Record<string, FileNode>,
 ) {
   const projectsNode =
     linuxFS["/"].contents?.home.contents?.Kevin.contents?.Desktop.contents
@@ -89,7 +97,7 @@ export async function populateProjects(
   for (const r of selectedRepos) {
     try {
       const tree = await fetchRepoTree(r.owner, r.repo);
-      const repoNode = buildFileNodeFromRepo(r.repo, tree);
+      const repoNode = buildFileNodeFromRepo(r.owner, r.repo, tree);
       projectsNode.contents![r.repo] = repoNode;
     } catch (err) {
       console.error("Failed to load repo", r.repo, err);
@@ -101,4 +109,28 @@ export async function populateProjects(
       };
     }
   }
+}
+
+export async function fetchBlobContent(
+  owner: string,
+  repo: string,
+  sha: string,
+): Promise<string> {
+  const res = await fetch(`/api/github/repos/${owner}/${repo}/blob/${sha}`);
+
+  if (!res.ok) {
+    if (res.status === 403) {
+      throw new Error("GitHub rate limited. Try again later.");
+    }
+    if (res.status === 404) {
+      throw new Error("File not found.");
+    }
+    if (res.status === 413) {
+      throw new Error("File too large to display.");
+    }
+    throw new Error(`Failed to fetch file content: ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data.content as string;
 }
