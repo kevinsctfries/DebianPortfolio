@@ -33,5 +33,6 @@ import help from "./help";
 import clear from "./clear";
 import whoami from "./whoami";
 import cd from "./cd";
+import ls from "./ls";
 
-[help, clear, whoami, cd].forEach(registerCommand);
+[help, clear, whoami, cd, ls].forEach(registerCommand);
