@@ -24,7 +24,8 @@ export default function About() {
         <section className={styles.section}>
           <h2>Contact</h2>
           <p>
-            Email: <a href="mailto:">kevinsctfries@gmail.com</a>
+            Email:
+            <a href="mailto:kevinsctfries@gmail.com">kevinsctfries@gmail.com</a>
             <br />
             GitHub:
             <a href="https://github.com/kevinsctfries">
