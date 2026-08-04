@@ -1,3 +1,5 @@
+@use "./styles/theme.scss";
+
 *,
 *::before,
 *::after {
@@ -7,47 +9,11 @@
   font-family: var(--font-sans);
 }
 
-:root {
-  --theme-panel-bg: rgba(36, 36, 36, 0.8);
-  --theme-fg-color: #3c3c3c;
-  --theme-text-color: #212121;
-  --theme-bg-color: #cecece;
-  --theme-base-color: #fcfcfc;
-  --theme-selected-bg-color: #398ee7;
-  --theme-selected-fg-color: #ffffff;
-  --theme-unfocused-fg-color: rgb(133, 133, 133);
-  --borders: #828282;
-  --hover-bg-color: #e8e8e8;
-  --active-bg-color: #b5b5b5;
-  --wm-title: #6c6c6c;
-  --wm-unfocused-title: #858585;
-  --wm-highlight: rgba(255, 255, 255, 0.8);
-  --wm-borders-edge: rgba(255, 255, 255, 0.8);
-  --wm-bg-a: #f7f7f7;
-  --wm-bg-b: #cecece;
-  --wm-shadow: rgba(0, 0, 0, 0.35);
-  --wm-border: rgba(0, 0, 0, 0.18);
-  --wm-button-hover-color-a: #ffffff;
-  --wm-button-hover-color-b: #cecece;
-  --wm-button-active-color-a: #afafaf;
-  --wm-button-active-color-b: #b7b7b7;
-  --wm-button-active-color-c: #b9b9b9;
-  --content-view-bg: #fcfcfc;
-  --hover-bg-color: #e8e8e8;
-  --active-bg-color: #b5b5b5;
-  --backdrop-active-bg-color: #b6b6b6;
-  --disabled-active-bg-color: #d7d7d7;
-
-  --scrollbar-thumb: #888;
-  --scrollbar-thumb-hover: #555;
-  --scrollbar-track: var(--theme-bg-color);
-}
-
 html,
 body {
   width: 100vw;
   height: 100vh;
-  background: var(--background);
+  background: var(--theme-base-color);
   color: var(--theme-base-color);
   overflow: hidden;
 }

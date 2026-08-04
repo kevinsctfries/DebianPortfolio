@@ -13,7 +13,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        border-bottom: 1px solid #b3b3b3;
+        border-bottom: 1px solid var(--borders);
         gap: 6px;
 
         .menu {
@@ -29,7 +29,7 @@
                 font-size: 12px;
 
                 &:hover {
-                    background: #e6e6e6;
+                    background: var(--hover-bg-color);
                     border-radius: 2px;
                 }
             }
@@ -47,14 +47,14 @@
                 border: 1px solid transparent;
 
                 &:hover {
-                    background: #c0c7d6;
+                    background: var(--hover-bg-color);
                 }
             }
 
             .dirPath {
                 display: flex;
                 align-items: center;
-                background: #dcdcdc;
+                background: var(--theme-bg-color);
                 border: 1px solid var(--borders);
                 border-radius: 3px;
                 height: 26px;
@@ -64,7 +64,7 @@
                 .pathSegment {
                     display: flex;
                     align-items: center;
-                    background: #dcdcdc;
+                    background: var(--theme-bg-color);
                     border-left: 1px solid var(--borders);
                     height: 100%;
                     padding: 0 14px;
@@ -75,7 +75,7 @@
                     }
 
                     &.active {
-                        background: #ababab;
+                        background: var(--active-bg-color);
                         font-weight: bold;
                     }
                 }
@@ -129,8 +129,8 @@
 
     .sidebar {
         width: 170px;
-        border-right: 1px solid #ccc;
-        background: #dae0e6;
+        border-right: 1px solid var(--explorer-sidebar-border);
+        background: var(--explorer-sidebar-bg);
         padding-top: 6px;
 
         span {
@@ -152,8 +152,8 @@
                 height: 22px;
 
                 &.active {
-                    background: #d2d9e0;
-                    box-shadow: inset 0 1px 3px #afafaf;
+                    background: var(--explorer-sidebar-active-bg);
+                    box-shadow: inset 0 1px 3px var(--explorer-sidebar-active-shadow);
                 }
             }
         }

@@ -31,7 +31,7 @@
     .clock {
         margin-left: auto;
         font-size: 0.75rem;
-        color: #fff;
+        color: var(--theme-selected-fg-color);
         padding: 0 8px;
     }
 
@@ -56,7 +56,7 @@
             height: 24px;
 
             &:hover {
-                background: #2c6db2;
+                background: var(--panel-app-hover-bg);
 
                 .appName {
                     color: var(--theme-selected-fg-color);
@@ -64,7 +64,7 @@
             }
 
             &.active {
-                background: #2c4866;
+                background: var(--panel-app-active-bg);
 
                 .appName {
                     color: var(--theme-selected-fg-color);

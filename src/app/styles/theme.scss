@@ -1,0 +1,81 @@
+:root {
+  // surfaces
+  --theme-bg-color: #cecece;
+  --theme-base-color: #fcfcfc;
+  --theme-panel-bg: rgba(36, 36, 36, 0.8);
+
+  // text
+  --theme-fg-color: #3c3c3c;
+  --theme-text-color: #212121;
+  --theme-unfocused-fg-color: rgb(133, 133, 133);
+
+  // accent
+  --theme-selected-bg-color: #398ee7;
+  --theme-selected-fg-color: #ffffff;
+  --theme-link-color: #1a5fb4;
+
+  // structure
+  --borders: #828282;
+  --hover-bg-color: #e8e8e8;
+  --active-bg-color: #b5b5b5;
+
+  // window manager
+  --wm-title: #6c6c6c;
+  --wm-shadow: rgba(0, 0, 0, 0.35);
+
+  // panel / taskbar accent variants
+  --panel-app-hover-bg: #2c6db2;
+  --panel-app-active-bg: #2c4866;
+
+  // scrollbars
+  --scrollbar-thumb: #888888;
+  --scrollbar-thumb-hover: #555555;
+  --scrollbar-track: var(--theme-bg-color);
+
+  //file explorer
+  --explorer-sidebar-bg: #dae0e6;
+  --explorer-sidebar-border: #cccccc;
+  --explorer-sidebar-active-bg: #d2d9e0;
+  --explorer-sidebar-active-shadow: #afafaf;
+}
+
+[data-theme="dark"] {
+  // surfaces
+  --theme-bg-color: #313131;
+  --theme-base-color: #232323;
+  --theme-panel-bg: rgba(20, 20, 20, 0.85);
+
+  // text
+  --theme-fg-color: #d0d0d0;
+  --theme-text-color: #e8e8e8;
+  --theme-unfocused-fg-color: rgb(150, 150, 150);
+
+  // accent
+  --theme-selected-bg-color: #4da3ff;
+  --theme-selected-fg-color: #ffffff;
+  --theme-link-color: #6cb2f7;
+
+  // structure
+  --borders: #4a4a4a;
+  --hover-bg-color: #3a3a3a;
+  --active-bg-color: #4a4a4a;
+
+  // window manager
+  --wm-title: #cfcfcf;
+  --wm-shadow: rgba(0, 0, 0, 0.55);
+
+  // panel / taskbar
+  --panel-app-hover-bg: #3a7bc8;
+  --panel-app-active-bg: #2c4866;
+
+  // scrollbars
+  --scrollbar-thumb: #666666;
+  --scrollbar-thumb-hover: #999999;
+  --scrollbar-track: var(--theme-bg-color);
+
+  // file explorer
+  --explorer-sidebar-bg: #2c3742;
+  --explorer-sidebar-border: #454545;
+  --explorer-sidebar-active-bg: #38434f;
+  --explorer-sidebar-active-shadow: rgba(0, 0, 0, 0.4);
+}

@@ -1,6 +1,6 @@
 .window {
     border: 1px solid var(--borders);
-    background: var(--wm-bg-b);
+    background: var(--theme-bg-color);
     border-radius: 8px;
     box-shadow: 6px 8px 20px var(--wm-shadow);
     overflow: hidden;
@@ -38,8 +38,8 @@
                     justify-content: center;
 
                     &:hover {
-                        background: var(--wm-button-hover-color-b);
-                        color: white;
+                        background: var(--theme-bg-color);
+                        color: var(--theme-selected-fg-color);
                         border-radius: 2px;
                     }
                 }
