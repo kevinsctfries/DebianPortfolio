@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./menu.module.scss";
 import { useDesktop } from "../Desktop/DesktopContext";
 import { AppName, desktopApps } from "../Desktop/appData";
@@ -46,7 +46,7 @@ export default function Menu({ onClose }: MenuProps) {
   const searchRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const apps: AppEntry[] = desktopApps.map(app => ({
+  const apps: AppEntry[] = desktopApps.map((app) => ({
     id: app.id,
     name: app.name,
     desc: app.desc || "",
@@ -80,7 +80,7 @@ export default function Menu({ onClose }: MenuProps) {
   ];
 
   // Filter apps based on search and category
-  const filteredApps = apps.filter(app => {
+  const filteredApps = apps.filter((app) => {
     const matchesSearch =
       app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.desc.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -123,14 +123,14 @@ export default function Menu({ onClose }: MenuProps) {
     const handleWindowInteracted = () => onClose();
     document.addEventListener(
       "desktop-window-interacted",
-      handleWindowInteracted
+      handleWindowInteracted,
     );
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
       document.removeEventListener(
         "desktop-window-interacted",
-        handleWindowInteracted
+        handleWindowInteracted,
       );
     };
   }, [onClose]);
@@ -163,7 +163,14 @@ export default function Menu({ onClose }: MenuProps) {
               className={styles.categoryIcon}
             />
           </button>
-          <button aria-label="Lock Screen" className={styles.commandButton}>
+          <button
+            aria-label="Lock Screen"
+            className={styles.commandButton}
+            onClick={() => {
+              document.dispatchEvent(new Event("portfolio-lock-screen"));
+              onClose();
+            }}
+          >
             <Image
               src={lockscreenIcon}
               alt="Lock Screen"
@@ -172,7 +179,14 @@ export default function Menu({ onClose }: MenuProps) {
               className={styles.categoryIcon}
             />
           </button>
-          <button aria-label="Log Out" className={styles.commandButton}>
+          <button
+            aria-label="Log Out"
+            className={styles.commandButton}
+            onClick={() => {
+              document.dispatchEvent(new Event("portfolio-log-out"));
+              onClose();
+            }}
+          >
             <Image
               src={logoutIcon}
               alt="Log Out..."
@@ -187,11 +201,12 @@ export default function Menu({ onClose }: MenuProps) {
       <div className={styles.content}>
         <div className={styles.appsList}>
           <ul>
-            {getAppsForCategory().map(app => (
+            {getAppsForCategory().map((app) => (
               <li key={app.id}>
                 <button
                   className={styles.appButton}
-                  onClick={() => handleAppClick(app.id)}>
+                  onClick={() => handleAppClick(app.id)}
+                >
                   <Image
                     src={app.icon}
                     alt={app.name}
@@ -209,14 +224,15 @@ export default function Menu({ onClose }: MenuProps) {
         </div>
 
         <div className={styles.sidebar}>
-          {categories.map(cat => (
+          {categories.map((cat) => (
             <div key={cat.id}>
               <button
                 key={cat.id}
                 className={`${styles.categoryButton} ${
                   selectedCategory === cat.id ? styles.selected : ""
                 }`}
-                onClick={() => setSelectedCategory(cat.id)}>
+                onClick={() => setSelectedCategory(cat.id)}
+              >
                 <Image
                   src={cat.icon}
                   alt={cat.name}
@@ -246,7 +262,7 @@ export default function Menu({ onClose }: MenuProps) {
           ref={searchRef}
           type="text"
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
           aria-label="Search"
         />
       </div>
